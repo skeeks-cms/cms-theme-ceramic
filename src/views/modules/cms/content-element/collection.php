@@ -158,17 +158,9 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
 
                                 <div class="col-7">
                                     <div class="feedback-review cf pull-right">
-                                        <? if ($rating>0) : ?>
-                                            <div class="product-rating pull-right" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
-                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
-                                                <meta itemprop="ratingValue" content="<?=$rating?$rating:0; ?>">
-                                                <meta itemprop="reviewCount" content="<?=$reviews2Count?$reviews2Count:0; ?>">
-                                            </div>
-                                        <? else : ?>
-                                            <div class="product-rating pull-right">
-                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
-                                            </div>
-                                        <? endif; ?>
+                                        <div class="product-rating pull-right">
+                                            <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                        </div>
                                         <div class="sx-feedback-links pull-right g-mr-10">
                                             <a href="#sx-reviews" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed  g-brd-primary--hover g-color-primary--hover">
                                                 <?
