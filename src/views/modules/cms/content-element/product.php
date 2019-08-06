@@ -26,6 +26,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
     <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?><?= $priceHelper->basePrice->money; ?>"/>
     <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
     <meta itemprop="description" content="<?= $model->description_short?$model->description_short:'-'; ?>"/>
+    <meta itemprop="sku" content="<?= $model->id; ?>"/>
 
     <? if ($model->relatedPropertiesModel->getAttribute('brand')) : ?>
         <meta itemprop="brand" content="<?= $model->relatedPropertiesModel->getSmartAttribute('brand'); ?>"/>
@@ -33,7 +34,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
         <meta itemprop="brand" content="<?=\Yii::$app->view->theme->title; ?>"/>
     <? endif; ?>
     <? if ($model->relatedPropertiesModel->getAttribute('Element_Code')) : ?>
-        <meta itemprop="sku" content="<?= $model->relatedPropertiesModel->getSmartAttribute('Element_Code§'); ?>"/>
+        <meta itemprop="mpn" content="<?= $model->relatedPropertiesModel->getSmartAttribute('Element_Code'); ?>"/>
     <? endif; ?>
     <? if ($model->image) : ?>
         <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
