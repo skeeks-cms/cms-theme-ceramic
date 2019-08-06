@@ -6,13 +6,36 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
+skeeks\assets\unify\base\UnifyHsRatingAsset::register($this);
+$this->registerJs(<<<JS
+$.HSCore.components.HSRating.init($('.js-rating-show'), {
+  spacing: 2
+});
+JS
+);
 $shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($model);
 $model = $shopProduct->cmsContentElement;
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
+
+$reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
+$rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
+
 ?>
-<section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper" itemscope itemtype="http://schema.org/Product">
+<div itemscope itemtype="http://schema.org/Product">
+<section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper">
     <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?><?= $priceHelper->basePrice->money; ?>"/>
-    <meta itemprop="url" content="<?= $model->absoluteUrl; ?>"/>
+    <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
+    <meta itemprop="description" content="<?= $model->description_short?$model->description_short:'-'; ?>"/>
+    <meta itemprop="sku" content="<?= $model->id; ?>"/>
+
+    <? if ($model->relatedPropertiesModel->getAttribute('brand')) : ?>
+        <meta itemprop="brand" content="<?= $model->relatedPropertiesModel->getSmartAttribute('brand'); ?>"/>
+    <? else : ?>
+        <meta itemprop="brand" content="<?=\Yii::$app->view->theme->title; ?>"/>
+    <? endif; ?>
+    <? if ($model->relatedPropertiesModel->getAttribute('Element_Code')) : ?>
+        <meta itemprop="mpn" content="<?= $model->relatedPropertiesModel->getSmartAttribute('Element_Code'); ?>"/>
+    <? endif; ?>
     <? if ($model->image) : ?>
         <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
     <? endif; ?>
@@ -127,37 +150,24 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
                                 <div class="col-7">
                                     <div class="feedback-review cf pull-right">
+                                        <? if ($rating>0) : ?>
                                         <div class="product-rating pull-right" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
-                                            <div class="rating-container rating-custom-size rating-animate">
-                                                <div class="rating">
-                                                    <span class="empty-stars">
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                    </span>
-                                                    <span class="filled-stars" style="width: 0%;">
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <meta itemprop="ratingValue" content="5">
-                                            <meta itemprop="bestRating" content="5">
-                                            <meta itemprop="ratingCount" content="1">
+                                            <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                            <meta itemprop="ratingValue" content="<?=$rating?$rating:0; ?>">
+                                            <meta itemprop="reviewCount" content="<?=$reviews2Count?$reviews2Count:0; ?>">
                                         </div>
-
+                                    <? else : ?>
+                                            <div class="product-rating pull-right">
+                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                            </div>
+                                    <? endif; ?>
                                         <div class="sx-feedback-links pull-right g-mr-10">
                                             <a href="#sx-reviews" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed  g-brd-primary--hover g-color-primary--hover">
                                                 <?
                                                 echo \Yii::t(
                                                     'app',
                                                     '{n, plural, =0{нет отзывов} =1{один отзыв} one{# отзыв} few{# отзыва} many{# отзывов} other{# отзыва}}',
-                                                    ['n' => 0]
+                                                    ['n' => $reviews2Count]
                                                 );
                                                 ?>
                                             </a>
@@ -174,8 +184,10 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                         </h1>-->
 
                         <div class="product-price g-mt-10 g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                            <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
                             <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
                             <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
+                            <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
                             <link itemprop="availability" href="http://schema.org/InStock">
 
                             <span class="current ss-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->basePrice->money; ?> </span><? if ($model->relatedPropertiesModel->getAttribute('MainUnit')) : ?><span class="g-font-weight-600">за 1 <?=$model->relatedPropertiesModel->getSmartAttribute('MainUnit');?></span><? endif; ?>
@@ -433,48 +445,13 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <? endforeach; ?>
     <? endif; ?>
 <? endif; ?>
-<section class="g-brd-gray-light-v4 g-brd-top">
 
-    <? if (\Yii::$app->shop->shopContents) : ?>
-        <?
-        $treeIds = [];
-        if ($model->cmsTree && $model->cmsTree->parent) {
-            $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
-        }
-        ?>
-        <div class="container g-mt-20 g-mb-40 ">
-            <?
-            $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-similar-products", [
-                'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
-                'label'                => "Рекомендуем также",
-                'enabledPaging'        => "N",
-                'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
-                'tree_ids'             => $treeIds,
-                'limit'                => 15,
-                'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-                'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
-                    $activeDataProvider->query->with('shopProduct');
-                    $activeDataProvider->query->with('shopProduct.baseProductPrice');
-                    $activeDataProvider->query->with('shopProduct.minProductPrice');
-                    $activeDataProvider->query->with('image');
-                    //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
-                    //$activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
-
-                    $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
-
-                },
-            ]);
-            $widgetElements::end();
-            ?>
-        </div>
-    <? endif; ?>
-</section>
 
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
     <div class="container">
 
         <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <h2>Отзывы</h2>
+            <div class="pull-right"><a href="#showReviewFormBlock"  data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div><h2>Отзывы</h2>
         </div>
 
         <?
@@ -487,76 +464,43 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         ?>
     </div>
 </section>
+</div>
+    <section class="g-brd-gray-light-v4 g-brd-top">
 
+        <? if (\Yii::$app->shop->shopContents) : ?>
+            <?
+            $treeIds = [];
+            if ($model->cmsTree && $model->cmsTree->parent) {
+                $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
+            }
+            ?>
+            <div class="container g-mt-20 g-mb-40 ">
+                <?
+                $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-similar-products", [
+                    'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+                    'label'                => "Рекомендуем также",
+                    'enabledPaging'        => "N",
+                    'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+                    'tree_ids'             => $treeIds,
+                    'limit'                => 15,
+                    'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                    'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
+                        $activeDataProvider->query->with('shopProduct');
+                        $activeDataProvider->query->with('shopProduct.baseProductPrice');
+                        $activeDataProvider->query->with('shopProduct.minProductPrice');
+                        $activeDataProvider->query->with('image');
+                        //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
+                        //$activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
 
-<section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
-    <div class="container">
+                        $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
 
-        <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <h2>Комментарии</h2>
-        </div>
-
-        <div class="col-md-12">
-
-        <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                        'namespace' => 'VkCommentsWidget',
-                        'apiId'     => 6911979,
-                    ]); ?>
-        </div>
-    </div>
-</section>
-
-
-<section style="display: none;">
-    <div class="container">
-        <div class="g-py-20">
-
-            <!-- Nav tabs -->
-            <ul class="nav justify-content-center u-nav-v5-1" role="tablist" data-target="nav-5-1-primary-hor-center" data-tabs-mobile-type="slide-up-down" data-btn-classes="btn btn-md btn-block u-btn-outline-primary">
-
-                <li class="nav-item">
-                    <a class="nav-link active h4" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link h4" data-toggle="tab" href="#sx-vk-comments" role="tab">Комментарии</a>
-                </li>
-            </ul>
-            <!-- End Nav tabs -->
-
-
-            <!-- Tab panes -->
-            <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
-
-
-                <div class="tab-pane fade" id="sx-reviews" role="tabpanel">
-                    <div class="reviews-section">
-                        <?
-                        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                            'namespace'         => 'Reviews2Widget',
-                            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                            'cmsContentElement' => $model,
-                        ]);
-                        $widgetReviews::end();
-                        ?>
-                    </div>
-                </div>
-
-
-                <div class="tab-pane fade sx-content" id="sx-vk-comments" role="tabpanel">
-                    <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                        'namespace' => 'VkCommentsWidget',
-                        'apiId'     => 6911979,
-                    ]); ?>
-                </div>
-
+                    },
+                ]);
+                $widgetElements::end();
+                ?>
             </div>
-
-        </div>
-    </div>
-</section>
-
-
-
+        <? endif; ?>
+    </section>
 
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
 
