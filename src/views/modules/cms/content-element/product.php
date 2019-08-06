@@ -8,7 +8,7 @@
 /* @var $this yii\web\View */
 skeeks\assets\unify\base\UnifyHsRatingAsset::register($this);
 $this->registerJs(<<<JS
-$.HSCore.components.HSRating.init($('.js-rating'), {
+$.HSCore.components.HSRating.init($('.js-rating-show'), {
   spacing: 2
 });
 JS
@@ -151,13 +151,13 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                     <div class="feedback-review cf pull-right">
                                         <? if ($rating>0) : ?>
                                         <div class="product-rating pull-right" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
-                                            <div class="js-rating g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                            <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
                                             <meta itemprop="ratingValue" content="<?=$rating?$rating:0; ?>">
                                             <meta itemprop="reviewCount" content="<?=$reviews2Count?$reviews2Count:0; ?>">
                                         </div>
                                     <? else : ?>
                                             <div class="product-rating pull-right">
-                                                <div class="js-rating g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
                                             </div>
                                     <? endif; ?>
                                         <div class="sx-feedback-links pull-right g-mr-10">
