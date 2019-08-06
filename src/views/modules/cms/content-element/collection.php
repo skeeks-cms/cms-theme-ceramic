@@ -7,10 +7,16 @@
  */
 /* @var $this yii\web\View */
 skeeks\assets\unify\base\UnifyHsCubeportfolioAsset::register($this);
+
+skeeks\assets\unify\base\UnifyHsRatingAsset::register($this);
 $this->registerJs(<<<JS
-    $.HSCore.components.HSCubeportfolio.init('.cbp');
+$.HSCore.components.HSRating.init($('.js-rating-show'), {
+  spacing: 2
+});
+$.HSCore.components.HSCubeportfolio.init('.cbp');
 JS
 );
+
 $this->registerCss(<<<CSS
 .g-parent {
     text-align: center;
@@ -33,6 +39,9 @@ $this->registerCss(<<<CSS
 }
 CSS
 );
+$reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
+$rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
+
 $productCollection = '';
 if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('bauservice_collection_id')) {
     $productsListQuery = \skeeks\cms\models\CmsContentElement::find()
@@ -149,37 +158,24 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
 
                                 <div class="col-7">
                                     <div class="feedback-review cf pull-right">
-                                        <div class="product-rating pull-right" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
-                                            <div class="rating-container rating-custom-size rating-animate">
-                                                <div class="rating">
-                                                    <span class="empty-stars">
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                    </span>
-                                                    <span class="filled-stars" style="width: 0%;">
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                    </span>
-                                                </div>
+                                        <? if ($rating>0) : ?>
+                                            <div class="product-rating pull-right" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
+                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                                <meta itemprop="ratingValue" content="<?=$rating?$rating:0; ?>">
+                                                <meta itemprop="reviewCount" content="<?=$reviews2Count?$reviews2Count:0; ?>">
                                             </div>
-                                            <meta itemprop="ratingValue" content="5">
-                                            <meta itemprop="bestRating" content="5">
-                                            <meta itemprop="ratingCount" content="1">
-                                        </div>
-
+                                        <? else : ?>
+                                            <div class="product-rating pull-right">
+                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                            </div>
+                                        <? endif; ?>
                                         <div class="sx-feedback-links pull-right g-mr-10">
                                             <a href="#sx-reviews" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed  g-brd-primary--hover g-color-primary--hover">
                                                 <?
                                                 echo \Yii::t(
                                                     'app',
                                                     '{n, plural, =0{нет отзывов} =1{один отзыв} one{# отзыв} few{# отзыва} many{# отзывов} other{# отзыва}}',
-                                                    ['n' => 0]
+                                                    ['n' => $reviews2Count]
                                                 );
                                                 ?>
                                             </a>
@@ -518,41 +514,20 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
 <? endif; ?>
 
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
-    <div id="accordion-09-heading-01" class="u-accordion__header g-px-0 g-py-5" role="tab">
-        <div class="container">
-
-            <div class="col-md-12 g-mt-20" id="sx-reviews">
-                <h2><a class="u-link-v5 g-color-main g-color-primary--hover" href="#accordion-09-body-01" data-toggle="collapse" data-parent="#accordion-09" aria-expanded="true" aria-controls="accordion-09-body-01">Отзывы</a></h2>
-            </div>
-            <div id="accordion-09-body-01" class="collapse show" role="tabpanel" aria-labelledby="accordion-09-heading-01" data-parent="#accordion-09">
-            <?
-            $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                'namespace'         => 'Reviews2Widget',
-                'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                'cmsContentElement' => $model,
-            ]);
-            $widgetReviews::end();
-            ?>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
     <div class="container">
 
         <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <h2>Комментарии</h2>
+            <div class="pull-right"><a href="#showReviewFormBlock"  data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div><h2>Отзывы</h2>
         </div>
 
-        <div class="col-md-12">
-
-            <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                'namespace' => 'VkCommentsWidget',
-                'apiId'     => 6911979,
-            ]); ?>
-        </div>
+        <?
+        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
+            'namespace'         => 'Reviews2Widget',
+            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
+            'cmsContentElement' => $model,
+        ]);
+        $widgetReviews::end();
+        ?>
     </div>
 </section>
 
