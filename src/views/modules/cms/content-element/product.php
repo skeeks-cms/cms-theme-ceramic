@@ -472,9 +472,17 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
     <div class="container">
+<? $this->registerJs(<<<JS
 
+$('.showReviewFormBtn').click(function() {
+    $('#showReviewFormBlock').fadeToggle();
+    return false;
+});
+JS
+);
+?>
         <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <h2>Отзывы</h2>
+            <div class="pull-right"><a href="#" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div><h2>Отзывы</h2>
         </div>
 
         <?
@@ -487,75 +495,6 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         ?>
     </div>
 </section>
-
-
-<section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
-    <div class="container">
-
-        <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <h2>Комментарии</h2>
-        </div>
-
-        <div class="col-md-12">
-
-        <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                        'namespace' => 'VkCommentsWidget',
-                        'apiId'     => 6911979,
-                    ]); ?>
-        </div>
-    </div>
-</section>
-
-
-<section style="display: none;">
-    <div class="container">
-        <div class="g-py-20">
-
-            <!-- Nav tabs -->
-            <ul class="nav justify-content-center u-nav-v5-1" role="tablist" data-target="nav-5-1-primary-hor-center" data-tabs-mobile-type="slide-up-down" data-btn-classes="btn btn-md btn-block u-btn-outline-primary">
-
-                <li class="nav-item">
-                    <a class="nav-link active h4" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link h4" data-toggle="tab" href="#sx-vk-comments" role="tab">Комментарии</a>
-                </li>
-            </ul>
-            <!-- End Nav tabs -->
-
-
-            <!-- Tab panes -->
-            <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
-
-
-                <div class="tab-pane fade" id="sx-reviews" role="tabpanel">
-                    <div class="reviews-section">
-                        <?
-                        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                            'namespace'         => 'Reviews2Widget',
-                            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                            'cmsContentElement' => $model,
-                        ]);
-                        $widgetReviews::end();
-                        ?>
-                    </div>
-                </div>
-
-
-                <div class="tab-pane fade sx-content" id="sx-vk-comments" role="tabpanel">
-                    <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                        'namespace' => 'VkCommentsWidget',
-                        'apiId'     => 6911979,
-                    ]); ?>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
 
 
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
