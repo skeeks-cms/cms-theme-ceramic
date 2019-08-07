@@ -524,56 +524,6 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
 </section>
 
 
-<section style="display: none;">
-    <div class="container">
-        <div class="g-py-20">
-
-            <!-- Nav tabs -->
-            <ul class="nav justify-content-center u-nav-v5-1" role="tablist" data-target="nav-5-1-primary-hor-center" data-tabs-mobile-type="slide-up-down" data-btn-classes="btn btn-md btn-block u-btn-outline-primary">
-
-                <li class="nav-item">
-                    <a class="nav-link active h4" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link h4" data-toggle="tab" href="#sx-vk-comments" role="tab">Комментарии</a>
-                </li>
-            </ul>
-            <!-- End Nav tabs -->
-
-
-            <!-- Tab panes -->
-            <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
-
-
-                <div class="tab-pane fade" id="sx-reviews" role="tabpanel">
-                    <div class="reviews-section">
-                        <?
-                        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                            'namespace'         => 'Reviews2Widget',
-                            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                            'cmsContentElement' => $model,
-                        ]);
-                        $widgetReviews::end();
-                        ?>
-                    </div>
-                </div>
-
-
-                <div class="tab-pane fade sx-content" id="sx-vk-comments" role="tabpanel">
-                    <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                        'namespace' => 'VkCommentsWidget',
-                        'apiId'     => 6911979,
-                    ]); ?>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
-
 
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
 
