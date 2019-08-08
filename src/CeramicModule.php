@@ -14,6 +14,6 @@ namespace skeeks\cms\themes\ceramic;
  */
 class CeramicModule extends \yii\base\Module
 {
-    public $controllerNamespace = 'skeeks\cms\themes\ceramic\controllers';
+    public $controllerNamespace = 'skeeks\cms\themes\ceramic\console\controllers';
 
 }
