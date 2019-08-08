@@ -1,0 +1,97 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation for table `{{%ceramic_collection_map}}`.
+ */
+class m190808_100056_create_table_ceramic_collection_map extends Migration
+{
+    /**
+     * @inheritdoc
+     */
+    public function safeUp()
+    {
+        $tableExist = $this->db->getTableSchema("{{%ceramic_collection_map}}", true);
+        if ($tableExist) {
+            return true;
+        }
+
+        $this->createTable('{{%ceramic_collection_map}}', [
+
+            'id' => $this->primaryKey()->notNull(),
+            'created_by' => $this->integer(11),
+            'updated_by' => $this->integer(11),
+            'created_at' => $this->integer(11),
+            'updated_at' => $this->integer(11),
+            'collection_id' => $this->integer(11),
+            'product_id' => $this->integer(11)
+        ]);
+ 
+        // creates index for column `created_by`
+        $this->createIndex(
+            'ceramic_collection_map__created_by',
+            '{{%ceramic_collection_map}}',
+            'created_by'
+        );
+
+        // add foreign key for table `cms_user`
+        $this->addForeignKey(
+            'ceramic_collection_map__created_by',
+            '{{%ceramic_collection_map}}',
+            'created_by',
+            '{{%cms_user}}',
+            'id',
+            'CASCADE'
+        );
+
+        // creates index for column `updated_by`
+        $this->createIndex(
+            'ceramic_collection_map__updated_by',
+            '{{%ceramic_collection_map}}',
+            'updated_by'
+        );
+
+        // add foreign key for table `cms_user`
+        $this->addForeignKey(
+            'ceramic_collection_map__updated_by',
+            '{{%ceramic_collection_map}}',
+            'updated_by',
+            '{{%cms_user}}',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown()
+    {
+        // drops foreign key for table `cms_user`
+        $this->dropForeignKey(
+            'ceramic_collection_map__created_by',
+            '{{%ceramic_collection_map}}'
+        );
+
+        // drops index for column `created_by`
+        $this->dropIndex(
+            'ceramic_collection_map__created_by',
+            '{{%ceramic_collection_map}}'
+        );
+
+        // drops foreign key for table `cms_user`
+        $this->dropForeignKey(
+            'ceramic_collection_map__updated_by',
+            '{{%ceramic_collection_map}}'
+        );
+
+        // drops index for column `updated_by`
+        $this->dropIndex(
+            'ceramic_collection_map__updated_by',
+            '{{%ceramic_collection_map}}'
+        );
+
+        $this->dropTable('{{%ceramic_collection_map}}');
+    }
+}
