@@ -70,8 +70,16 @@ CSS
                                     'pageSize'             => 30,
                                     'orderBy'              => 'name',
                                     'order'                => SORT_ASC,
+                                    'contentElementClass'  => \skeeks\cms\themes\ceramic\models\CeramicCollectionModel::class,
                                     'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
+                                    if (ENV == 'dev') {
+                                        $activeDataProvider->query->joinWith('CmsContentElementProducts as p');
+                                        $activeDataProvider->query->andWhere(['IS NOT', 'p.id', null]);
+
+                                        var_dump($activeDataProvider->query->createCommand()->rawSql);die();
+                                    }
                                         $activeDataProvider->query->andWhere(['IS NOT', 'image_id', NULL]);
+                                        //$activeDataProvider->query->andWhere(['']);
                                     }
                                 ]);
                                 $widgetElements::end();
