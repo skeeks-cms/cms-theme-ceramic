@@ -305,22 +305,23 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                             <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
                                 <div class="tab-pane fade show active" id="nav-1-1-accordion-default-hor-left-icons--1" role="tabpanel">
                                     <? $shopDeliveries = \skeeks\cms\shop\models\ShopDelivery::find()->active()->all(); ?>
+                                    <? if ($shopDeliveries) : ?>
                                     <p><strong>Варианты доставки</strong></p>
                                     <ul>
-                                    <? if ($shopDeliveries) : ?>
                                         <? foreach ($shopDeliveries as $delivery) : ?>
                                             <li><?= $delivery->name; ?></li>
                                         <? endforeach;?>
+                                    </ul>
                                     <? endif; ?>
-                                    </ul> <? $shopPaySystems = \skeeks\cms\shop\models\ShopPaySystem::find()->active()->all(); ?>
+                                    <? $shopPaySystems = \skeeks\cms\shop\models\ShopPaySystem::find()->active()->all(); ?>
+                                    <? if ($shopPaySystems) : ?>
                                     <p><strong>Варианты оплаты</strong></p>
                                     <ul>
-                                    <? if ($shopPaySystems) : ?>
                                         <? foreach ($shopPaySystems as $paySystem) : ?>
                                             <li><?= $paySystem->name; ?></li>
                                         <? endforeach;?>
-                                    <? endif; ?>
                                     </ul>
+                                    <? endif; ?>
                                 </div>
 
                                 <div class="tab-pane fade" id="nav-1-1-accordion-default-hor-left-icons--2" role="tabpanel">

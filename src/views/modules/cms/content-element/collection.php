@@ -240,7 +240,7 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
                                     <a class="nav-link active" data-toggle="tab" href="#nav-1-1-accordion-default-hor-left-icons--1" role="tab">
                                         <!--<i class="icon-christmas-037 u-tab-line-icon-pro "></i>-->
                                         <i class="fas fa-truck g-mr-3"></i>
-                                        Условия доставки
+                                        Условия доставки и оплаты
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -256,9 +256,24 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
                             <!-- Tab panes -->
                             <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
                                 <div class="tab-pane fade show active" id="nav-1-1-accordion-default-hor-left-icons--1" role="tabpanel">
-                                    <p>Ближайшая дата доставки: 31 мар. 2019 г.</p>
-                                    <p>Способы доставки: курьер, Почта России</p>
-                                    <p>Регионы доставки: вся Россия</p>
+                                    <? $shopDeliveries = \skeeks\cms\shop\models\ShopDelivery::find()->active()->all(); ?>
+                                    <? if ($shopDeliveries) : ?>
+                                        <p><strong>Варианты доставки</strong></p>
+                                        <ul>
+                                            <? foreach ($shopDeliveries as $delivery) : ?>
+                                                <li><?= $delivery->name; ?></li>
+                                            <? endforeach;?>
+                                        </ul>
+                                    <? endif; ?>
+                                    <? $shopPaySystems = \skeeks\cms\shop\models\ShopPaySystem::find()->active()->all(); ?>
+                                    <? if ($shopPaySystems) : ?>
+                                        <p><strong>Варианты оплаты</strong></p>
+                                        <ul>
+                                            <? foreach ($shopPaySystems as $paySystem) : ?>
+                                                <li><?= $paySystem->name; ?></li>
+                                            <? endforeach;?>
+                                        </ul>
+                                    <? endif; ?>
                                 </div>
 
                                 <div class="tab-pane fade" id="nav-1-1-accordion-default-hor-left-icons--2" role="tabpanel">
