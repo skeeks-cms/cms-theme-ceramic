@@ -6,7 +6,7 @@
  * Time: 10:11
  */
 namespace skeeks\cms\themes\ceramic\console\controllers;
-use common\models\CeramicCollectionMap;
+use skeeks\cms\themes\ceramic\models\CeramicCollectionMap;
 use skeeks\cms\models\CmsContentElement;
 use skeeks\cms\models\CmsContentElementProperty;
 
@@ -23,38 +23,38 @@ class CollectionController extends \yii\console\Controller
      */
     public function actionUpdateMap()
     {
-        $products = CmsContentElement::find()->andWhere(['type' => 2]);
+        $products = CmsContentElement::find()->andWhere(['content_id' => 2]);
         foreach ($products->each(50) as $product) {
-            $transaction = \Yii::$app->db->beginTransaction();
-            try {
-                $collectionID = $product->relatedPropertiesModel->getAttribute($this->productProperty);
-
-                $collectionIDs = explode(', ', $collectionID);
-                foreach ($collectionIDs as $collectionID) {
-                    $collection = CmsContentElement::find()
-                        ->joinWith('relatedElementProperties map')
-                        ->joinWith('relatedElementProperties.property property')
-                        ->andWhere(['property.code'     => $this->collectionProperty])
-                        ->andWhere(['map.value'         => (int) $collectionID])
-                        ->one();
-                }
+            $collectionID = $product->relatedPropertiesModel->getAttribute($this->productProperty);
+            if (!$collectionID) {
+                continue;
+            }
+            $collectionIDs = explode(', ', $collectionID);
+            foreach ($collectionIDs as $collectionID) {
+                $collection = CmsContentElement::find()
+                    ->joinWith('relatedElementProperties map')
+                    ->joinWith('relatedElementProperties.property property')
+                    ->andWhere(['property.code'     => $this->collectionProperty])
+                    ->andWhere(['map.value'         => (int) $collectionID])
+                    ->one();
 
                 $connection = CeramicCollectionMap::find()
                     ->andWhere(['product_id'=>$product->id])->andWhere(['collection_id' => $collection->id]);
                 if (!$connection->exists()) {
-                    $connection = new CeramicCollectionMap();
-                    $connection->product_id = $product->id;
-                    $connection->collection_id = $collection->id;
+                    try {
+                        $connection = new CeramicCollectionMap();
+                        $connection->product_id = $product->id;
+                        $connection->collection_id = $collection->id;
 
-                    if (!$connection->save()) {
-                        throw new Exception($cmsNewMainDomain->errors);
+                        if (!$connection->save()) {
+                            throw new Exception($connection->errors);
+                        }
+
+                    }
+                    catch (\Throwable $e) {
+                        \Yii::error('Связь для товара не установилась ' . $e->getMessage(), self::class);
                     }
                 }
-                    $transaction->commit();
-            }
-            catch (\Throwable $e) {
-                $transaction->rollBack();
-                \Yii::error('Связь для товара не установилась ' . $e->getMessage(), self::class);
             }
         }
 
