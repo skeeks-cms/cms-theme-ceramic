@@ -7,8 +7,8 @@
  */
 /* @var $this yii\web\View */
 skeeks\assets\unify\base\UnifyHsCubeportfolioAsset::register($this);
-
 skeeks\assets\unify\base\UnifyHsRatingAsset::register($this);
+
 $this->registerJs(<<<JS
 $.HSCore.components.HSRating.init($('.js-rating-show'), {
   spacing: 2
@@ -39,7 +39,9 @@ $this->registerCss(<<<CSS
 }
 CSS
 );
-var_dump($model->->createCommand()->rawSql);
+
+$collection = new \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement($model->toArray());
+
 $reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
 $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
@@ -188,19 +190,19 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
                         </h1>
                         <? if ($productCollection) : ?>
                             <? if ($productCollection->relatedPropertiesModel->getAttribute('brand')) : ?>
-                            <div class="row g-pb-10 g-pt-10">
-                                <div class="col-sm-6">Производитель:</div><div class="col-sm-6"><strong><?=$productCollection->relatedPropertiesModel->getSmartAttribute('brand')?></strong></div>
-                            </div>
+                                <div class="row g-pb-10 g-pt-10">
+                                    <div class="col-sm-6">Производитель:</div><div class="col-sm-6"><strong><?=$productCollection->relatedPropertiesModel->getSmartAttribute('brand')?></strong></div>
+                                </div>
                             <? endif; ?>
                             <? if ($productCollection->relatedPropertiesModel->getAttribute('Country_of_manufacture')) : ?>
-                            <div class="row g-pb-20">
-                                <div class="col-sm-6">Страна:</div><div class="col-sm-6"><strong><?=$productCollection->relatedPropertiesModel->getSmartAttribute('Country_of_manufacture')?></strong></div>
-                            </div>
+                                <div class="row g-pb-20">
+                                    <div class="col-sm-6">Страна:</div><div class="col-sm-6"><strong><?=$productCollection->relatedPropertiesModel->getSmartAttribute('Country_of_manufacture')?></strong></div>
+                                </div>
                             <? endif; ?>
 
 
 
-                        <a href="#" onclick="new sx.classes.Location().href('#portfolio-section')" class="btn btn-xxl u-btn-primary g-rounded-50 g-font-size-18">Смотреть товары коллекции</a><? endif; ?>
+                            <a href="#" onclick="new sx.classes.Location().href('#portfolio-section')" class="btn btn-xxl u-btn-primary g-rounded-50 g-font-size-18">Смотреть товары коллекции</a><? endif; ?>
 
                         <div class="product-price g-mt-10 g-mb-10">
 
@@ -295,15 +297,15 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
         </div>
     </div>
 
-<? if ($model->description_full) : ?>
-    <div class="container">
-        <div class="col-md-12 sx-content" id="sx-description">
-            <h2>Описание</h2>
-            <?= $model->description_full; ?>
+    <? if ($model->description_full) : ?>
+        <div class="container">
+            <div class="col-md-12 sx-content" id="sx-description">
+                <h2>Описание</h2>
+                <?= $model->description_full; ?>
 
+            </div>
         </div>
-    </div>
-<? endif; ?>
+    <? endif; ?>
 </section>
 
 <!-- Cube Portfolio Blocks - Content -->
@@ -328,61 +330,61 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
                 ->andWhere(['ccp.code'     => 'Place_in_the_Collection'])
                 ->andWhere(['element_id' => \yii\helpers\ArrayHelper::map($productsListQuery->all(),'id', 'id')])
                 ->groupBy(['value_enum'])
-        ;
+            ;
             if ($placesProps->exists()) : ?>
                 <!-- Cube Portfolio Blocks - Filter -->
                 <ul id="filterControls1" class="d-block list-inline">
                     <li class="list-inline-item cbp-filter-item cbp-filter-item-active" role="button" data-filter="*">
                         <a href="#" onclick="return false;" class="btn btn-sm u-btn-outline-darkgray g-mr-10 g-mb-15">Показать все</a>
                     </li>
-             <? foreach ($placesProps->all() as $placePropId) :
-                 $placeProp = \skeeks\cms\models\CmsContentPropertyEnum::findOne($placePropId->value_enum);
-                    if ($placeProp) :
-             ?>
+                    <? foreach ($placesProps->all() as $placePropId) :
+                        $placeProp = \skeeks\cms\models\CmsContentPropertyEnum::findOne($placePropId->value_enum);
+                        if ($placeProp) :
+                            ?>
 
-                        <li class="list-inline-item cbp-filter-item" role="button" data-filter=".id<?=$placeProp->id?>">
-                            <a href="#" onclick="return false;" class="btn btn-sm u-btn-outline-darkgray g-mr-10 g-mb-15"><?=$placeProp->value;?></a>
-                        </li>
-                <?  endif; ?>
-            <? endforeach; ?>
+                            <li class="list-inline-item cbp-filter-item" role="button" data-filter=".id<?=$placeProp->id?>">
+                                <a href="#" onclick="return false;" class="btn btn-sm u-btn-outline-darkgray g-mr-10 g-mb-15"><?=$placeProp->value;?></a>
+                            </li>
+                        <?  endif; ?>
+                    <? endforeach; ?>
                 </ul>
                 <!-- End Cube Portfolio Blocks - Filter -->
-        <?  endif; ?>
-        <!-- Cube Portfolio Blocks - Content -->
-        <div class="cbp" data-controls="#filterControls1" data-animation="quicksand" data-x-gap="30" data-y-gap="30" data-media-queries='[{"width": 1500, "cols": 4}, {"width": 1100, "cols": 4}, {"width": 800, "cols": 4}, {"width": 480, "cols": 3}, {"width": 300, "cols": 1}]'>
-            <? foreach ($productsListQuery->all() as $product) :
-            /**
-             * @var $product \skeeks\cms\models\CmsContentElement
-             */
-                $shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($product);
-                $productModel = $shopProduct->cmsContentElement;
-                $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($productModel);
+            <?  endif; ?>
+            <!-- Cube Portfolio Blocks - Content -->
+            <div class="cbp" data-controls="#filterControls1" data-animation="quicksand" data-x-gap="30" data-y-gap="30" data-media-queries='[{"width": 1500, "cols": 4}, {"width": 1100, "cols": 4}, {"width": 800, "cols": 4}, {"width": 480, "cols": 3}, {"width": 300, "cols": 1}]'>
+                <? foreach ($productsListQuery->all() as $product) :
+                    /**
+                     * @var $product \skeeks\cms\models\CmsContentElement
+                     */
+                    $shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($product);
+                    $productModel = $shopProduct->cmsContentElement;
+                    $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($productModel);
 
-                ?>
-            <!-- Cube Portfolio Blocks - Item -->
-                <div class="col-lg-3 col-md-6 col-sm-6 item cbp-item identity <? if ($product->relatedPropertiesModel->getAttribute('Place_in_the_Collection')) : ?>id<?=$product->relatedPropertiesModel->getAttribute('Place_in_the_Collection'); ?><? endif; ?>">
-                    <article class="card-prod h-100 to-cart-fly-wrapper">
-                        <? if ($shopProduct && $shopProduct->baseProductPrice && $shopProduct->minProductPrice && $shopProduct->minProductPrice->id != $shopProduct->baseProductPrice->id) :
-                            $percent =  (int)(100-$shopProduct->minProductPrice->money->getAmount()*100/$shopProduct->baseProductPrice->money->getAmount()); ?>
-                            <div class="card-prod--sale">
-                                <div><span class="number">-<?=(int)$percent;?></span><span class="percent">%</span></div>
-                                <div class="caption">скидка</div>
+                    ?>
+                    <!-- Cube Portfolio Blocks - Item -->
+                    <div class="col-lg-3 col-md-6 col-sm-6 item cbp-item identity <? if ($product->relatedPropertiesModel->getAttribute('Place_in_the_Collection')) : ?>id<?=$product->relatedPropertiesModel->getAttribute('Place_in_the_Collection'); ?><? endif; ?>">
+                        <article class="card-prod h-100 to-cart-fly-wrapper">
+                            <? if ($shopProduct && $shopProduct->baseProductPrice && $shopProduct->minProductPrice && $shopProduct->minProductPrice->id != $shopProduct->baseProductPrice->id) :
+                                $percent =  (int)(100-$shopProduct->minProductPrice->money->getAmount()*100/$shopProduct->baseProductPrice->money->getAmount()); ?>
+                                <div class="card-prod--sale">
+                                    <div><span class="number">-<?=(int)$percent;?></span><span class="percent">%</span></div>
+                                    <div class="caption">скидка</div>
+                                </div>
+                            <? endif; ?>
+                            <div class="card-prod--photo">
+                                <a href="<?= $product->url; ?>" data-pjax="0">
+                                    <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($product->image ? $product->image->src : null,
+                                        new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                            'w' => 260,
+                                            'h' => 200,
+                                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                                        ]), $product->code
+                                    ); ?>" title="<?= \yii\helpers\Html::encode($product->name); ?>" alt="<?= \yii\helpers\Html::encode($product->name); ?>" />
+                                </a>
                             </div>
-                        <? endif; ?>
-                        <div class="card-prod--photo">
-                            <a href="<?= $product->url; ?>" data-pjax="0">
-                                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($product->image ? $product->image->src : null,
-                                    new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                        'w' => 260,
-                                        'h' => 200,
-                                        'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                                    ]), $product->code
-                                ); ?>" title="<?= \yii\helpers\Html::encode($product->name); ?>" alt="<?= \yii\helpers\Html::encode($product->name); ?>" />
-                            </a>
-                        </div>
-                        <div class="card-prod--inner">
+                            <div class="card-prod--inner">
 
-                            <!--<div class="card-prod--reviews">
+                                <!--<div class="card-prod--reviews">
                     <?/* if ($count>0) : */?>
                         <div class="rating">
                             <div class="star <?/*= ($rating > 0) ? "active" :''*/?>"></div>
@@ -404,27 +406,27 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
                 </div>-->
 
 
-                            <?/* if ($model->relatedPropertiesModel->getSmartAttribute('typeConstruct')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('typeConstruct'); */?>
-                            <!--<div class="card-prod--category">
+                                <?/* if ($model->relatedPropertiesModel->getSmartAttribute('typeConstruct')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('typeConstruct'); */?>
+                                <!--<div class="card-prod--category">
                         <?/* if ($model->cmsTree) : */?>
                             <a href="<?/*= $model->cmsTree->url; */?>"><?/*= $model->cmsTree->name; */?></a>
                         <?/* endif; */?>
                     </div>-->
-                            <?/* endif; */?>
+                                <?/* endif; */?>
 
-                            <div class="card-prod--title">
-                                <a href="<?= $product->url; ?>" title="<?= $product->name; ?>" data-pjax="0" class="g-color-gray-dark-v2 g-font-weight-600 g-line-height-1"><?= $product->name; ?></a>
-                            </div>
-                            <? if (isset($shopProduct)) : ?>
-                                <div class="card-prod--price">
-                                    <? if ($priceHelper->hasDiscount) : ?>
-                                        <div class="old"><?= $priceHelper->basePrice->money; ?></div>
-                                        <div class="new"><?= $priceHelper->minMoney; ?></div>
-                                    <? else : ?>
-                                        <div class="new g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></div>
-                                    <? endif; ?>
+                                <div class="card-prod--title">
+                                    <a href="<?= $product->url; ?>" title="<?= $product->name; ?>" data-pjax="0" class="g-color-gray-dark-v2 g-font-weight-600 g-line-height-1"><?= $product->name; ?></a>
+                                </div>
+                                <? if (isset($shopProduct)) : ?>
+                                    <div class="card-prod--price">
+                                        <? if ($priceHelper->hasDiscount) : ?>
+                                            <div class="old"><?= $priceHelper->basePrice->money; ?></div>
+                                            <div class="new"><?= $priceHelper->minMoney; ?></div>
+                                        <? else : ?>
+                                            <div class="new g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></div>
+                                        <? endif; ?>
 
-                                    <?/* if ($shopProduct->minProductPrice && $shopProduct->baseProductPrice && $shopProduct->minProductPrice->id == $shopProduct->baseProductPrice->id) : */?><!--
+                                        <?/* if ($shopProduct->minProductPrice && $shopProduct->baseProductPrice && $shopProduct->minProductPrice->id == $shopProduct->baseProductPrice->id) : */?><!--
                         <div class="new g-color-primary g-font-size-20"><?/*= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); */?></div>
                     <?/* else : */?>
                         <?/* if ($shopProduct->baseProductPrice && $shopProduct->minProductPrice) : */?>
@@ -432,52 +434,52 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
                         <div class="new"><?/*= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); */?></div>
                         <?/* endif; */?>
                     --><?/* endif; */?>
-                                </div>
+                                    </div>
 
-                                <div class="card-prod--actions">
-                                    <? if ($shopProduct->quantity > 0 && $shopProduct->minProductPrice) : ?>
-                                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
-                                            'class' => 'btn btn-primary js-to-cart to-cart-fly-btn',
-                                            'type' => 'button',
-                                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                                        ]); ?>
-                                    <? else : ?>
-                                        <?= \yii\helpers\Html::tag('a', "Подробнее", [
-                                            'class' => 'btn to-cart',
-                                            'type' => 'button',
-                                            'href' => $product->url,
-                                            'data' => ['pjax' => 0],
-                                        ]); ?>
-                                    <? endif; ?>
-                                </div>
-                            <? endif; ?>
-                        </div>
-                        <div class="card-prod--hidden">
-                            <div class="card-prod--inner">
-                                <div class="with-icon-group">
+                                    <div class="card-prod--actions">
+                                        <? if ($shopProduct->quantity > 0 && $shopProduct->minProductPrice) : ?>
+                                            <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
+                                                'class' => 'btn btn-primary js-to-cart to-cart-fly-btn',
+                                                'type' => 'button',
+                                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                                            ]); ?>
+                                        <? else : ?>
+                                            <?= \yii\helpers\Html::tag('a', "Подробнее", [
+                                                'class' => 'btn to-cart',
+                                                'type' => 'button',
+                                                'href' => $product->url,
+                                                'data' => ['pjax' => 0],
+                                            ]); ?>
+                                        <? endif; ?>
+                                    </div>
+                                <? endif; ?>
+                            </div>
+                            <div class="card-prod--hidden">
+                                <div class="card-prod--inner">
+                                    <div class="with-icon-group">
 
 
-                                    <?/* if ($model->relatedPropertiesModel->getSmartAttribute('totalDetaley')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('totalDetaley'); */?><!--
+                                        <?/* if ($model->relatedPropertiesModel->getSmartAttribute('totalDetaley')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('totalDetaley'); */?><!--
                         <p class="with-icon"><img src="<?/*= \v3project\themes\mega\assets\ThemeMegaBuildAsset::getAssetUrl('images/details.png'); */?>" alt="">деталей: <?/*=$prop;*/?></p>
                         --><?/* endif; */?>
-                                    <!--<p class="with-icon"><img src="<?/*= \v3project\themes\mega\assets\ThemeMegaBuildAsset::getAssetUrl('images/age.png'); */?>" alt="">возраст:
+                                        <!--<p class="with-icon"><img src="<?/*= \v3project\themes\mega\assets\ThemeMegaBuildAsset::getAssetUrl('images/age.png'); */?>" alt="">возраст:
                             --><?/*= $v3ProductElement->v3toysProductProperty ? $v3ProductElement->v3toysProductProperty->ageString : ""; */?>
-                                </div>
+                                    </div>
 
-                                <?/* if ($v3ProductElement->v3toysProductProperty->sku) : */?><!--
+                                    <?/* if ($v3ProductElement->v3toysProductProperty->sku) : */?><!--
                         <p>Артикул: <?/*= $v3ProductElement->v3toysProductProperty->sku; */?></p>
                     <?/* endif; */?>
                     <?/* if ($prop = $model->relatedPropertiesModel->getSmartAttribute('brand')) : */?>
                         <p>Бренд:  <?/*=$prop; */?></p>
                     --><?/* endif; */?>
+                                </div>
                             </div>
-                        </div>
-                    </article>
-                </div>
-            <!-- End Cube Portfolio Blocks - Item -->
-            <? endforeach; ?>
-        </div>
-    <?  endif; ?>
+                        </article>
+                    </div>
+                    <!-- End Cube Portfolio Blocks - Item -->
+                <? endforeach; ?>
+            </div>
+        <?  endif; ?>
 
     </div>
 </section>
@@ -485,7 +487,7 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
 
 
 <? if (\Yii::$app->shop->shopContents) : ?>
-<section class="g-brd-top g-mt-20 noborder">
+    <section class="g-brd-top g-mt-20 noborder">
 
         <?
         $treeIds = [];
@@ -518,7 +520,7 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
             $widgetElements::end();
             ?>
         </div>
-</section>
+    </section>
 <? endif; ?>
 
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">

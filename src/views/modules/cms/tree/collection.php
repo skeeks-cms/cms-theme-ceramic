@@ -95,7 +95,7 @@ CSS
                                         $query->joinWith('minPriceProduct');
                                         $query->joinWith('minPriceProduct.shopProduct');
                                         $query->joinWith('minPriceProduct.shopProduct.baseProductPrice as baseProductPrice');
-                                        $query->orderBy(['baseProductPrice.price' => SORT_ASC]);
+                                        $query->orderBy(['baseProductPrice.price' => SORT_DESC]);
 
                                         /*print_r($query->one());die;*/
 

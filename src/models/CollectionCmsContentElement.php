@@ -48,14 +48,13 @@ class CollectionCmsContentElement extends CmsContentElement
     public function getMinPriceProduct()
     {
         $query = $this->getProducts()
-            //->joinWith('shopProduct as shopProduct')
-            //->joinWith('shopProduct.baseProductPrice as baseProductPrice')
-            //->andWhere(['>', 'baseProductPrice.price', 0])
-            //->orderBy(['baseProductPrice.price' => SORT_ASC])
-            ->limit(1)
+            ->joinWith('shopProduct as shopProduct')
+            ->joinWith('shopProduct.baseProductPrice as baseProductPrice')
+            ->andWhere(['>', 'baseProductPrice.price', 0])
+            ->orderBy(['baseProductPrice.price' => SORT_ASC])
+            //->limit(1)
         ;
         $query->multiple = false;
-        var_dump($query->createCommand()->rawSql);
         return $query;
     }
 
