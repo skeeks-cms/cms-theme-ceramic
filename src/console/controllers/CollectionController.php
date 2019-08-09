@@ -48,17 +48,18 @@ class CollectionController extends \yii\console\Controller
                     ->andWhere(['property.code' => $this->collectionProperty])
                     ->andWhere(['map.value' => (int)$collectionID])
                     ->one();
-                
+
                 if (!$collection) {
                     $this->stdout("\tКоллекция не найдена в нашей базе\n", Console::FG_RED);
-                    die;
+                    continue;
+                    //die;
                 }
 
                 $connection = CeramicCollectionMap::find()
                     ->andWhere(['product_id' => $product->id])->andWhere(['collection_id' => $collection->id]);
 
                 if (!$connection->exists()) {
-                    $this->stdout("\tСвязь не создана\n");
+                    $this->stdout("\tНайдена новая привязка к коллекции\n");
                     try {
                         $connection = new CeramicCollectionMap();
                         $connection->product_id = $product->id;

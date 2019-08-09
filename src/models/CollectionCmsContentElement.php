@@ -15,6 +15,7 @@ use yii\helpers\ArrayHelper;
  * @property ProductCmsContentElement $minPriceProduct Продукт с минимальной ценой
  *
  * @property string $country Страна
+ * @property string $brand Производитель
  */
 class CollectionCmsContentElement extends CmsContentElement
 {
@@ -24,7 +25,10 @@ class CollectionCmsContentElement extends CmsContentElement
      */
     public function getProducts()
     {
-        return $this->hasMany(ProductCmsContentElement::className(), ['id' => 'product_id'])->viaTable('ceramic_collection_map', ['collection_id' => 'id'])->from(['ceramicPorductContentElement' => ProductCmsContentElement::tableName()]);
+        return $this->hasMany(ProductCmsContentElement::className(), ['id' => 'product_id'])
+            ->viaTable('ceramic_collection_map', ['collection_id' => 'id'])
+            ->from(['ceramicProductContentElement' => ProductCmsContentElement::tableName()])
+            ;
     }
 
     /**
@@ -34,7 +38,7 @@ class CollectionCmsContentElement extends CmsContentElement
     {
         $query = $this->getProducts()->limit(1)->orderBy(['id' => SORT_ASC]);
         $query->multiple = false;
-        
+
         return $query;
     }
 
@@ -44,14 +48,14 @@ class CollectionCmsContentElement extends CmsContentElement
     public function getMinPriceProduct()
     {
         $query = $this->getProducts()
-            ->joinWith('shopProduct as shopProduct')
-            ->joinWith('shopProduct.baseProductPrice as baseProductPrice')
-            ->andWhere(['>', 'baseProductPrice.price', 0])
-            ->orderBy(['baseProductPrice.price' => SORT_ASC])
+            //->joinWith('shopProduct as shopProduct')
+            //->joinWith('shopProduct.baseProductPrice as baseProductPrice')
+            //->andWhere(['>', 'baseProductPrice.price', 0])
+            //->orderBy(['baseProductPrice.price' => SORT_ASC])
             ->limit(1)
         ;
         $query->multiple = false;
-
+        var_dump($query->createCommand()->rawSql);
         return $query;
     }
 
@@ -61,8 +65,20 @@ class CollectionCmsContentElement extends CmsContentElement
      */
     public function getCountry()
     {
-        if ($this->firstProduct && $this->firstProduct->relatedPropertiesModel->getAttribute('country')) {
-            return  $this->firstProduct->relatedPropertiesModel->getSmartAttribute('country');
+        if ($this->firstProduct && $this->firstProduct->relatedPropertiesModel->getAttribute('Country_of_manufacture')) {
+            return  $this->firstProduct->relatedPropertiesModel->getSmartAttribute('Country_of_manufacture');
+        }
+
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrand()
+    {
+        if ($this->firstProduct && $this->firstProduct->relatedPropertiesModel->getAttribute('brand')) {
+            return  $this->firstProduct->relatedPropertiesModel->getSmartAttribute('brand');
         }
 
         return '';
@@ -91,14 +107,14 @@ class CollectionCmsContentElement extends CmsContentElement
             return $priceValues[0]['model'];
         }*/
     }
-    
-    
+
+
     public function getShopProductPrices()
     {
         /*$this->getProductCmsContentElements()
             ->joinWith('shopProduct as shopProduct')
             ->joinWith('shopProduct.minProductPrice as minProductPrice')
             ;*/
-            
+
     }
 }

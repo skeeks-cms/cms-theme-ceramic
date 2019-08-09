@@ -19,6 +19,9 @@ class ProductCmsContentElement extends ShopCmsContentElement
      */
     public function getCmsContentElementCollections()
     {
-        return $this->hasMany(CollectionCmsContentElement::className(), ['id' => 'collection_id'])->viaTable('ceramic_collection_map', ['product_id' => 'id']);
+        return $this->hasMany(CollectionCmsContentElement::className(), ['id' => 'collection_id'])
+            ->viaTable('ceramic_collection_map', ['product_id' => 'id'])
+            ->from(['ceramicCollectionContentElement' => CollectionCmsContentElement::tableName()])
+        ;
     }
 }

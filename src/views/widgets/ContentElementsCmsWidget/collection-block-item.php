@@ -16,11 +16,16 @@ if ($model->minPriceProduct) {
 }
 
 echo count($model->products);
-
+$this->registerCss(<<<CSS
+.g-bg-hover:hover {
+    background-color: rgba(0,0,0, 0.3);
+} 
+CSS
+);
 ?>
 <!-- Blog Background Overlay Blocks -->
 <article class="u-block-hover">
-    <div class="g-bg-cover g-bg-bluegray-gradient-opacity-v1--after">
+    <div class="g-bg-cover g-bg-bluegray-gradient-opacity-v1--after g-bg-hover">
         <? if ($model->image) : ?>
             <img class="d-flex align-items-end u-block-hover__main--mover-down" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                 new \skeeks\cms\components\imaging\filters\Thumbnail([

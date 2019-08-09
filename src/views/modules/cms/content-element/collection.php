@@ -39,6 +39,7 @@ $this->registerCss(<<<CSS
 }
 CSS
 );
+var_dump($model->->createCommand()->rawSql);
 $reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
 $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
