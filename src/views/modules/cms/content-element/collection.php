@@ -45,19 +45,6 @@ $collection = new \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement(
 $reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
 $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
-$productCollection = '';
-if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('bauservice_collection_id')) {
-    $productsListQuery = \skeeks\cms\models\CmsContentElement::find()
-        ->joinWith('relatedElementProperties map')
-        ->joinWith('relatedElementProperties.property property')
-        ->andWhere(['property.code'     => 'Collection_Id'])
-        ->andWhere(['map.value'         => (int) $bauservice_collection_id]);
-    $productCollection = $productsListQuery->one();
-    /**
-     * @var $productCollection \skeeks\cms\models\CmsContentElement
-     */
-}
-
 ?>
 <section class="sx-product-card-wrapper g-mt-0 g-pt-0 g-pb-0 to-cart-fly-wrapper">
     <? if ($model->image) : ?>
@@ -188,21 +175,21 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
                         <h1 class="g-color-gray-dark-v2" itemprop="name">
                             <?= $model->name; ?>
                         </h1>
-                        <? if ($productCollection) : ?>
-                            <? if ($productCollection->relatedPropertiesModel->getAttribute('brand')) : ?>
+                        <? if ($collection->brand) : ?>
                                 <div class="row g-pb-10 g-pt-10">
-                                    <div class="col-sm-6">Производитель:</div><div class="col-sm-6"><strong><?=$productCollection->relatedPropertiesModel->getSmartAttribute('brand')?></strong></div>
+                                    <div class="col-sm-6">Производитель:</div><div class="col-sm-6"><strong><?= $collection->brand; ?></strong></div>
                                 </div>
-                            <? endif; ?>
-                            <? if ($productCollection->relatedPropertiesModel->getAttribute('Country_of_manufacture')) : ?>
-                                <div class="row g-pb-20">
-                                    <div class="col-sm-6">Страна:</div><div class="col-sm-6"><strong><?=$productCollection->relatedPropertiesModel->getSmartAttribute('Country_of_manufacture')?></strong></div>
-                                </div>
-                            <? endif; ?>
+                        <? endif; ?>
+                        <? if ($collection->country) : ?>
+                            <div class="row g-pb-20">
+                                <div class="col-sm-6">Страна:</div><div class="col-sm-6"><strong><?= $collection->country; ?></strong></div>
+                            </div>
+                        <? endif; ?>
 
 
-
-                            <a href="#" onclick="new sx.classes.Location().href('#portfolio-section')" class="btn btn-xxl u-btn-primary g-rounded-50 g-font-size-18">Смотреть товары коллекции</a><? endif; ?>
+                        <? if ($collection->getProducts()->exists()) : ?>
+                            <a href="#" onclick="new sx.classes.Location().href('#portfolio-section')" class="btn btn-xxl u-btn-primary g-rounded-50 g-font-size-18">Смотреть товары коллекции</a>
+                        <? endif; ?>
 
                         <div class="product-price g-mt-10 g-mb-10">
 
@@ -352,13 +339,11 @@ if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('ba
             <?  endif; ?>
             <!-- Cube Portfolio Blocks - Content -->
             <div class="cbp" data-controls="#filterControls1" data-animation="quicksand" data-x-gap="30" data-y-gap="30" data-media-queries='[{"width": 1500, "cols": 4}, {"width": 1100, "cols": 4}, {"width": 800, "cols": 4}, {"width": 480, "cols": 3}, {"width": 300, "cols": 1}]'>
-                <? foreach ($productsListQuery->all() as $product) :
+                <? foreach ($collection->products as $product) :
                     /**
-                     * @var $product \skeeks\cms\models\CmsContentElement
+                     * @var $product \skeeks\cms\shop\models\ShopCmsContentElement
                      */
-                    $shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($product);
-                    $productModel = $shopProduct->cmsContentElement;
-                    $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($productModel);
+                    $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($product);
 
                     ?>
                     <!-- Cube Portfolio Blocks - Item -->
