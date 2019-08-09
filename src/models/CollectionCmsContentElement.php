@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property ProductCmsContentElement[] $cmsContentElementProducts
  * @property CmsContentElement $oneProductCollection
- * @property string $сollectionCountry
+ * @property string $СЃollectionCountry
  */
 class CollectionCmsContentElement extends CmsContentElement
 {
@@ -48,7 +48,7 @@ class CollectionCmsContentElement extends CmsContentElement
     }
 
     /**
-     * Отсортируем список товаров по ценам и отдаем товар с минимальной ценой.
+     * РћС‚СЃРѕСЂС‚РёСЂСѓРµРј СЃРїРёСЃРѕРє С‚РѕРІР°СЂРѕРІ РїРѕ С†РµРЅР°Рј Рё РѕС‚РґР°РµРј С‚РѕРІР°СЂ СЃ РјРёРЅРёРјР°Р»СЊРЅРѕР№ С†РµРЅРѕР№.
      * @return mixed
      */
     public function getMinCollectionPrice()
