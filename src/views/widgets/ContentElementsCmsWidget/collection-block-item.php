@@ -44,8 +44,8 @@ if ($model->minPriceProduct) {
         <? if ($model->image) : ?>
             <img class="d-flex align-items-end u-block-hover__main--mover-down" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                 new \skeeks\cms\components\imaging\filters\Thumbnail([
-                    'w' => 500,
-                    'h' => 600,
+                    'w' => 305,
+                    'h' => 450,
                     //'m' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                 ]), $model->code
             ); ?>" alt="<?= $model->name; ?>">
@@ -67,8 +67,8 @@ if ($model->minPriceProduct) {
                 <?= $model->country; ?>
             </h4>
             <? if ($priceHelper) : ?>
-            <span class="g-color-white-opacity-0_7 g-pos-rel g-top-2 mx-2">&#183;</span>
-            <span class="g-color-white-opacity-0_7 g-font-size-10 text-uppercase">от <?= $priceHelper->basePrice->money;  ?></span>
+                <span class="g-color-white-opacity-0_7 g-pos-rel g-top-2 mx-2">&#183;</span>
+                <span class="g-color-white-opacity-0_7 g-font-size-10 text-uppercase">от <?= $priceHelper->basePrice->money;  ?></span>
             <? endif; ?>
 
         </div>

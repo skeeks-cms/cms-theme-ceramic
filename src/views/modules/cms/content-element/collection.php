@@ -176,9 +176,9 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                             <?= $model->name; ?>
                         </h1>
                         <? if ($collection->brand) : ?>
-                                <div class="row g-pb-10 g-pt-10">
-                                    <div class="col-sm-6">Производитель:</div><div class="col-sm-6"><strong><?= $collection->brand; ?></strong></div>
-                                </div>
+                            <div class="row g-pb-10 g-pt-10">
+                                <div class="col-sm-6">Производитель:</div><div class="col-sm-6"><strong><?= $collection->brand; ?></strong></div>
+                            </div>
                         <? endif; ?>
                         <? if ($collection->country) : ?>
                             <div class="row g-pb-20">
@@ -349,8 +349,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                     <!-- Cube Portfolio Blocks - Item -->
                     <div class="col-lg-3 col-md-6 col-sm-6 item cbp-item identity <? if ($product->relatedPropertiesModel->getAttribute('Place_in_the_Collection')) : ?>id<?=$product->relatedPropertiesModel->getAttribute('Place_in_the_Collection'); ?><? endif; ?>">
                         <article class="card-prod h-100 to-cart-fly-wrapper">
-                            <? if ($shopProduct && $shopProduct->baseProductPrice && $shopProduct->minProductPrice && $shopProduct->minProductPrice->id != $shopProduct->baseProductPrice->id) :
-                                $percent =  (int)(100-$shopProduct->minProductPrice->money->getAmount()*100/$shopProduct->baseProductPrice->money->getAmount()); ?>
+                            <? if ($product->shopProduct && $product->shopProduct->baseProductPrice && $product->shopProduct->minProductPrice && $product->shopProduct->minProductPrice->id != $product->shopProduct->baseProductPrice->id) :
+                                $percent =  (int)(100-$product->shopProduct->minProductPrice->money->getAmount()*100/$shopProduct->baseProductPrice->money->getAmount()); ?>
                                 <div class="card-prod--sale">
                                     <div><span class="number">-<?=(int)$percent;?></span><span class="percent">%</span></div>
                                     <div class="caption">скидка</div>
@@ -402,7 +402,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                 <div class="card-prod--title">
                                     <a href="<?= $product->url; ?>" title="<?= $product->name; ?>" data-pjax="0" class="g-color-gray-dark-v2 g-font-weight-600 g-line-height-1"><?= $product->name; ?></a>
                                 </div>
-                                <? if (isset($shopProduct)) : ?>
+                                <? if (isset($product->shopProduct)) : ?>
                                     <div class="card-prod--price">
                                         <? if ($priceHelper->hasDiscount) : ?>
                                             <div class="old"><?= $priceHelper->basePrice->money; ?></div>
@@ -411,22 +411,14 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                             <div class="new g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></div>
                                         <? endif; ?>
 
-                                        <?/* if ($shopProduct->minProductPrice && $shopProduct->baseProductPrice && $shopProduct->minProductPrice->id == $shopProduct->baseProductPrice->id) : */?><!--
-                        <div class="new g-color-primary g-font-size-20"><?/*= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); */?></div>
-                    <?/* else : */?>
-                        <?/* if ($shopProduct->baseProductPrice && $shopProduct->minProductPrice) : */?>
-                        <div class="old"><?/*= \Yii::$app->money->convertAndFormat($shopProduct->baseProductPrice->money); */?></div>
-                        <div class="new"><?/*= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); */?></div>
-                        <?/* endif; */?>
-                    --><?/* endif; */?>
                                     </div>
 
                                     <div class="card-prod--actions">
-                                        <? if ($shopProduct->quantity > 0 && $shopProduct->minProductPrice) : ?>
+                                        <? if ($product->shopProduct->quantity > 0 && $product->shopProduct->minProductPrice) : ?>
                                             <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
                                                 'class' => 'btn btn-primary js-to-cart to-cart-fly-btn',
                                                 'type' => 'button',
-                                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$product->shopProduct->id}, 1); return false;"),
                                             ]); ?>
                                         <? else : ?>
                                             <?= \yii\helpers\Html::tag('a', "Подробнее", [
@@ -562,4 +554,3 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
         </div>
     <? endif; ?>
 </section>
-
