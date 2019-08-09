@@ -9,9 +9,12 @@ use yii\helpers\ArrayHelper;
 
 /**
  *
- * @property ProductCmsContentElement[] $cmsContentElementProducts
- * @property CmsContentElement $oneProductCollection
- * @property string $сollectionCountry
+ * @property ProductCmsContentElement[] $products
+ *
+ * @property ProductCmsContentElement $firstProduct Первый продукт связанной с коллекцией
+ * @property ProductCmsContentElement $minPriceProduct Продукт с минимальной ценой
+ *
+ * @property string $country Страна
  */
 class CollectionCmsContentElement extends CmsContentElement
 {
@@ -19,33 +22,57 @@ class CollectionCmsContentElement extends CmsContentElement
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCmsContentElementProducts()
+    public function getProducts()
     {
-        return $this->hasMany(ProductCmsContentElement::className(), ['id' => 'product_id'])->viaTable('ceramic_collection_map', ['collection_id' => 'id']);
+        return $this->hasMany(ProductCmsContentElement::className(), ['id' => 'product_id'])->viaTable('ceramic_collection_map', ['collection_id' => 'id'])->from(['ceramicPorductContentElement' => ProductCmsContentElement::tableName()]);
     }
 
-    public function getOneProductCollection()
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFirstProduct()
     {
-        if ($this->cmsContentElementProducts) {
-            return $this->cmsContentElementProducts[0];
-        }
-        else {
-            return false;
-        }
+        $query = $this->getProducts()->limit(1)->orderBy(['id' => SORT_ASC]);
+        $query->multiple = false;
+        
+        return $query;
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMinPriceProduct()
+    {
+        $query = $this->getProducts()
+            ->joinWith('shopProduct as shopProduct')
+            ->joinWith('shopProduct.baseProductPrice as baseProductPrice')
+            ->andWhere(['>', 'baseProductPrice.price', 0])
+            ->orderBy(['baseProductPrice.price' => SORT_ASC])
+            ->limit(1)
+        ;
+        $query->multiple = false;
+
+        return $query;
+    }
+
 
     /**
      * @return string
      */
-    public function getCollectionCountry()
+    public function getCountry()
     {
-        if ($this->oneProductCollection && $this->oneProductCollection->relatedPropertiesModel->getAttribute('country')) {
-            return  $this->oneProductCollection->relatedPropertiesModel->getSmartAttribute('country');
+        if ($this->firstProduct && $this->firstProduct->relatedPropertiesModel->getAttribute('country')) {
+            return  $this->firstProduct->relatedPropertiesModel->getSmartAttribute('country');
         }
-        else {
-            return '';
-        }
+
+        return '';
     }
+
+    public function getPrice()
+    {
+
+    }
+
 
     /**
      * Отсортируем список товаров по ценам и отдаем товар с минимальной ценой.
@@ -54,7 +81,7 @@ class CollectionCmsContentElement extends CmsContentElement
     public function getMinCollectionPrice()
     {
 
-        $priceValues =[];
+        /*$priceValues =[];
         if ($this->cmsContentElementProducts) {
             foreach ($this->cmsContentElementProducts as $product) {
                 $priceValues[$product->id]['price']   = $product->shopProduct->minProductPrice->price;
@@ -62,6 +89,16 @@ class CollectionCmsContentElement extends CmsContentElement
             }
             ArrayHelper::multisort($priceValues, 'price');
             return $priceValues[0]['model'];
-        }
+        }*/
+    }
+    
+    
+    public function getShopProductPrices()
+    {
+        /*$this->getProductCmsContentElements()
+            ->joinWith('shopProduct as shopProduct')
+            ->joinWith('shopProduct.minProductPrice as minProductPrice')
+            ;*/
+            
     }
 }

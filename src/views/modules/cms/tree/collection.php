@@ -70,15 +70,43 @@ CSS
                                     'pageSize'             => 30,
                                     'orderBy'              => 'name',
                                     'order'                => SORT_ASC,
-                                    'contentElementClass'  => \skeeks\cms\themes\ceramic\models\CeramicCollectionModel::class,
+                                    'contentElementClass'  => \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::class,
                                     'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
                                     if (ENV == 'dev') {
-                                        $activeDataProvider->query->joinWith('CmsContentElementProducts as p');
-                                        $activeDataProvider->query->andWhere(['IS NOT', 'p.id', null]);
 
-                                        var_dump($activeDataProvider->query->createCommand()->rawSql);die();
+
+                                        /**
+                                         * @var $query \yii\db\ActiveQuery
+                                         */
+                                        $query = $activeDataProvider->query;
+                                        $query
+                                            ->select([
+                                                \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName() . ".*",
+                                            ])
+                                            ->joinWith('products as p')
+                                            /*->joinWith('productCmsContentElements.shopProduct as shopProduct')
+                                            ->joinWith('productCmsContentElements.shopProduct.baseProductPrice as baseProductPrice')
+                                            ->andWhere([">", "baseProductPrice.price", 0])*/
+                                        ;
+
+                                        $query->andWhere(['IS NOT', 'p.id', null]);
+                                        $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName() . '.image_id', NULL]);
+                                        
+                                        $query->joinWith('minPriceProduct');
+                                        $query->joinWith('minPriceProduct.shopProduct');
+                                        $query->joinWith('minPriceProduct.shopProduct.baseProductPrice as baseProductPrice');
+                                        $query->orderBy(['baseProductPrice.price' => SORT_ASC]);
+
+                                        /*print_r($query->one());die;*/
+
+                                        //$activeDataProvider->query->orderBy([\skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName() . ".id"]);
+                                            
+                                        /*$activeDataProvider->query
+                                            ->andWhere(['IS NOT', 'p.id', null]);*/
+
+                                        //var_dump($activeDataProvider->query->createCommand()->rawSql);die();
                                     }
-                                        $activeDataProvider->query->andWhere(['IS NOT', 'image_id', NULL]);
+                                        //$activeDataProvider->query->andWhere(['IS NOT', 'image_id', NULL]);
                                         //$activeDataProvider->query->andWhere(['']);
                                     }
                                 ]);

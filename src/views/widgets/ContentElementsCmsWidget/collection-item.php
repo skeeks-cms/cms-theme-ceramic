@@ -9,7 +9,7 @@
  *
  */
 /* @var $this yii\web\View */
-
+$model->firstProduct
 ?>
 
 <div class="u-block-hover g-parent">

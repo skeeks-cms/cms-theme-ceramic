@@ -9,6 +9,14 @@
  *
  */
 /* @var $this yii\web\View */
+if ($model->minPriceProduct) {
+    echo $model->minPriceProduct->shopProduct->baseProductPriceValue;
+} else {
+    echo "НЕТ";
+}
+
+echo count($model->products);
+
 ?>
 <!-- Blog Background Overlay Blocks -->
 <article class="u-block-hover">
@@ -33,7 +41,7 @@
             </h2>
             <h4 class="d-inline-block g-color-white-opacity-0_7 g-font-size-11 mb-0">
                 производитель
-                <a class="g-color-white-opacity-0_7 text-uppercase" href="<?= $model->url; ?>"><?= $model->getCollectionCountry(); ?></a>
+                <a class="g-color-white-opacity-0_7 text-uppercase" href="<?= $model->url; ?>"><?= $model->country; ?></a>
             </h4>
             <span class="g-color-white-opacity-0_7 g-pos-rel g-top-2 mx-2">&#183;</span>
             <span class="g-color-white-opacity-0_7 g-font-size-10 text-uppercase">цена от
