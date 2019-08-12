@@ -66,7 +66,7 @@ CSS
                                 <?
                                 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
 
-                                $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("collections-products", [
+                                $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("collections", [
                                     'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-collections',
                                     'enabledPaging'        => "Y",
                                     'pageSize'             => 30,

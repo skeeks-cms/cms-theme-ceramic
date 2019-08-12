@@ -16,6 +16,7 @@ use skeeks\cms\themes\ceramic\models\ProductCmsContentElement;
 use skeeks\cms\themes\unify\UnifyTheme;
 use yii\base\Exception;
 use yii\db\Expression;
+use yii\db\QueryInterface;
 
 /**
  * @author Semenov Alexander <semenov@skeeks.com>
@@ -189,7 +190,9 @@ class CollectionEavQueryFilterHandler extends CmsEavQueryFilterHandler
             }
 
 
-            $activeQuery->andWhere(['in', $tableName.'.id', $unionQuery]);
+            $activeQuery->joinWith("ceramicCollectionMaps as ceramicCollectionMaps");
+            $activeQuery->andWhere(['in', 'ceramicCollectionMaps.product_id', $unionQuery]);
+
         }
 
         return $this;
