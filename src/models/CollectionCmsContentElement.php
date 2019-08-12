@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property ProductCmsContentElement $firstProduct Первый продукт связанной с коллекцией
  * @property ProductCmsContentElement $minPriceProduct Продукт с минимальной ценой
+ * @property ProductCmsContentElement $notNullProduct Выбрать товары с ненулевыми ценами
  *
  * @property string $country Страна
  * @property string $brand Производитель
@@ -42,6 +43,19 @@ class CollectionCmsContentElement extends CmsContentElement
         return $query;
     }
 
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNotNullProduct()
+    {
+        $query = $this->getProducts()
+            ->joinWith('shopProduct.shopProductPrices as pricesFilter')
+            ->andWhere(['>','`pricesFilter`.price',0]);
+
+        return $query;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -57,6 +71,8 @@ class CollectionCmsContentElement extends CmsContentElement
         $query->multiple = false;
         return $query;
     }
+
+
 
 
     /**

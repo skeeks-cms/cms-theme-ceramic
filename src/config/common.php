@@ -14,7 +14,7 @@ return [
 
                 'ceramic/collection/update-map' => [
                     'class'    => \skeeks\cms\agent\CmsAgent::class,
-                    'name'     => ['skeeks/t/app', 'Sort products by collection'],
+                    'name'     => 'Сортировка товаров по коллекциям',
                     'interval' => 3600 * 6,
                 ],
             ],

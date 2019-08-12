@@ -129,7 +129,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
 
                     <? else: ?>
-
+                        <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $collection->name; ?>">
                     <? endif; ?>
                 </div>
             </div>
@@ -300,22 +300,18 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
     <div class="container">
         <!-- Heading -->
         <?
-        if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('bauservice_collection_id')) :
-            $productsListQuery = \skeeks\cms\themes\ceramic\models\ProductCmsContentElement::find()
-                ->joinWith('relatedElementProperties map')
-                ->joinWith('relatedElementProperties.property property')
-                ->andWhere(['property.code'     => 'Collection_Id'])
-                ->andWhere(['map.value'         => (int) $bauservice_collection_id]);
-            if (!\Yii::$app->shop->is_show_product_no_price)   {
-                $productsListQuery->with('shopProduct');
-                $productsListQuery->joinWith('shopProduct.shopProductPrices as pricesFilter');
-                $productsListQuery->andWhere(['>','`pricesFilter`.price',0]);
-            }
+
+        $collectionProducts = $collection->products;
+
+        if (!\Yii::$app->shop->is_show_product_no_price)   {
+            $collectionProducts = $collection->notNullProduct;
+        }
+        if ($collectionProducts) :
 
             $placesProps = \skeeks\cms\models\CmsContentElementProperty::find()
                 ->leftJoin(\skeeks\cms\models\CmsContentProperty::tableName(). ' ccp' , 'ccp.id ='.skeeks\cms\models\CmsContentElementProperty::tableName().'.property_id')
                 ->andWhere(['ccp.code'     => 'Place_in_the_Collection'])
-                ->andWhere(['element_id' => \yii\helpers\ArrayHelper::map($productsListQuery->all(),'id', 'id')])
+                ->andWhere(['element_id' => \yii\helpers\ArrayHelper::map($collectionProducts,'id', 'id')])
                 ->groupBy(['value_enum'])
             ;
             if ($placesProps->exists()) : ?>
@@ -339,7 +335,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
             <?  endif; ?>
             <!-- Cube Portfolio Blocks - Content -->
             <div class="cbp" data-controls="#filterControls1" data-animation="quicksand" data-x-gap="30" data-y-gap="30" data-media-queries='[{"width": 1500, "cols": 4}, {"width": 1100, "cols": 4}, {"width": 800, "cols": 4}, {"width": 480, "cols": 3}, {"width": 300, "cols": 1}]'>
-                <? foreach ($collection->products as $product) :
+                <? foreach ($collectionProducts as $product) :
                     /**
                      * @var $product \skeeks\cms\shop\models\ShopCmsContentElement
                      */
