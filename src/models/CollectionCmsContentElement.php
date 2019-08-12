@@ -10,10 +10,11 @@ use yii\helpers\ArrayHelper;
 /**
  *
  * @property ProductCmsContentElement[] $products
+ * @property ProductCmsContentElement[] $hasPriceProducts Товары которые имеют не нулевую цену
  *
  * @property ProductCmsContentElement $firstProduct Первый продукт связанной с коллекцией
  * @property ProductCmsContentElement $minPriceProduct Продукт с минимальной ценой
- * @property ProductCmsContentElement $notNullProduct Выбрать товары с ненулевыми ценами
+ *
  * @property CeramicCollectionMap[] $ceramicCollectionMaps
  *
  * @property string $country Страна
@@ -56,7 +57,7 @@ class CollectionCmsContentElement extends CmsContentElement
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNotNullProduct()
+    public function getHasPriceProducts()
     {
         $query = $this->getProducts()
             ->joinWith('shopProduct.shopProductPrices as pricesFilter')

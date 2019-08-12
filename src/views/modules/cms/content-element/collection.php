@@ -187,7 +187,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                         <? endif; ?>
 
 
-                        <? if ($collection->getProducts()->exists()) : ?>
+                        <? if ($collection->products) : ?>
                             <a href="#" onclick="new sx.classes.Location().href('#portfolio-section')" class="btn btn-xxl u-btn-primary g-rounded-50 g-font-size-18">Смотреть товары коллекции</a>
                         <? endif; ?>
 
@@ -303,9 +303,9 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
         $collectionProducts = $collection->products;
 
-        if (!\Yii::$app->shop->is_show_product_no_price)   {
+        /*if (!\Yii::$app->shop->is_show_product_no_price)   {
             $collectionProducts = $collection->notNullProduct;
-        }
+        }*/
         if ($collectionProducts) :
 
             $placesProps = \skeeks\cms\models\CmsContentElementProperty::find()
