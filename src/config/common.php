@@ -11,12 +11,12 @@ return [
         'i18n' => [
             'translations' =>
                 [
-                    'skeeks/cms/themes/ceramic/app' =>
+                    'skeeks/cms/theme/ceramic/app' =>
                         [
                             'class'    => 'yii\i18n\PhpMessageSource',
-                            'basePath' => '@skeeks/cms/themes/ceramic/messages',
+                            'basePath' => '@skeeks/cms/theme/ceramic/messages',
                             'fileMap'  => [
-                                'skeeks/cms/themes/ceramic/app' => 'app.php',
+                                'skeeks/cms/theme/ceramic/app' => 'app.php',
                             ],
                         ],
                 ],
@@ -27,7 +27,7 @@ return [
 
                 'ceramic/collection/update-map' => [
                     'class'    => \skeeks\cms\agent\CmsAgent::class,
-                    'name'     => ['skeeks/cms/themes/ceramic/app', 'Sort products by collection'],
+                    'name'     => ['skeeks/cms/theme/ceramic/app', 'Sort products by collection'],
                     'interval' => 3600 * 6,
                 ],
             ],
