@@ -301,7 +301,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
         <!-- Heading -->
         <?
         if ($bauservice_collection_id = $model->relatedPropertiesModel->getAttribute('bauservice_collection_id')) :
-            $productsListQuery = \skeeks\cms\shop\models\ShopCmsContentElement::find()
+            $productsListQuery = \skeeks\cms\themes\ceramic\models\ProductCmsContentElement::find()
                 ->joinWith('relatedElementProperties map')
                 ->joinWith('relatedElementProperties.property property')
                 ->andWhere(['property.code'     => 'Collection_Id'])
