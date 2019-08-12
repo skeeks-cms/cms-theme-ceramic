@@ -414,19 +414,11 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
                         'enabledCurrentTree'            => 'N',
                         'enabledCurrentTreeChild'       => 'N',
                         'enabledCurrentTreeChildAll'    => 'N',
-                        'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                        'contentElementClass'  => \skeeks\cms\themes\ceramic\models\ProductCmsContentElement::class,
                         'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($collection, $collectionProduct) {
-                            if ($bauservice_collection_id = $collection->relatedPropertiesModel->getAttribute('bauservice_collection_id')) {
-                                $activeDataProvider->query->joinWith('relatedElementProperties map')
-                                    ->joinWith('relatedElementProperties.property property')
-                                    ->andWhere(['property.code'     => 'Collection_Id'])
-                                    ->andWhere(['map.value'         => (int) $bauservice_collection_id]);
-                            }
+                            $activeDataProvider->query->leftJoin(\skeeks\cms\themes\ceramic\models\CeramicCollectionMap::tableName() . ' ceramicMap', 'ceramicMap.product_id='.\skeeks\cms\themes\ceramic\models\ProductCmsContentElement::tableName().'.id');
+                            $activeDataProvider->query->andWhere(['collection_id' => $collection->id]);
 
-                            $activeDataProvider->query->with('shopProduct');
-                            $activeDataProvider->query->with('shopProduct.baseProductPrice');
-                            $activeDataProvider->query->with('shopProduct.minProductPrice');
-                            $activeDataProvider->query->with('image');
                             if (!\Yii::$app->shop->is_show_product_no_price)   {
                                 $activeDataProvider->query->joinWith('shopProduct.shopProductPrices as pricesFilter');
                                 $activeDataProvider->query->andWhere(['>','`pricesFilter`.price',0]);
@@ -485,14 +477,8 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
                     'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
                     'tree_ids'             => $treeIds,
                     'limit'                => 15,
-                    'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                    'contentElementClass'  => \skeeks\cms\themes\ceramic\models\ProductCmsContentElement::class,
                     'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($collectionProduct) {
-                        $activeDataProvider->query->with('shopProduct');
-                        $activeDataProvider->query->with('shopProduct.baseProductPrice');
-                        $activeDataProvider->query->with('shopProduct.minProductPrice');
-                        $activeDataProvider->query->with('image');
-                        //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
-                        //$activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
 
                         $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $collectionProduct->id]);
 
@@ -524,7 +510,7 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
                 'enabledSearchParams'                => "N",
                 'enabledCurrentTree'                => "N",
                 'limit'                => 15,
-                'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                'contentElementClass'  => \skeeks\cms\themes\ceramic\models\ProductCmsContentElement::class,
                 'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($collectionProduct) {
                     $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName() . ".id", $collectionProduct->id]);
                     $query->leftJoin('shop_product', '`shop_product`.`id` = `cms_content_element`.`id`');
