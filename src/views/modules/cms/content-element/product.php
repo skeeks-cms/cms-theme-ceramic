@@ -385,7 +385,7 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
                     <article class="u-block-hover">
                         <!-- Article Image -->
                         <div class="rounded">
-                            <? if ($collectionProduct->image) : ?>
+                            <? if ($collection->image) : ?>
                             <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($collection->image ? $collection->image->src : null,
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
                                     'w' => 500,

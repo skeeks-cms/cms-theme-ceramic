@@ -8,13 +8,26 @@
 return [
 
     'components' => [
+        'i18n' => [
+            'translations' =>
+                [
+                    'skeeks/cms/themes/ceramic/app' =>
+                        [
+                            'class'    => 'yii\i18n\PhpMessageSource',
+                            'basePath' => '@skeeks/cms/themes/ceramic/messages',
+                            'fileMap'  => [
+                                'skeeks/cms/themes/ceramic/app' => 'app.php',
+                            ],
+                        ],
+                ],
+        ],
 
         'cmsAgent' => [
             'commands' => [
 
                 'ceramic/collection/update-map' => [
                     'class'    => \skeeks\cms\agent\CmsAgent::class,
-                    'name'     => ['skeeks/t/app', 'Sort products by collection'],
+                    'name'     => ['skeeks/cms/themes/ceramic/app', 'Sort products by collection'],
                     'interval' => 3600 * 6,
                 ],
             ],

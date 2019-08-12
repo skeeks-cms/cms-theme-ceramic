@@ -61,7 +61,7 @@ CSS
                             </div>
 
                             <!-- Cube Portfolio Blocks - Content -->
-                            <div id="portfolio-section" class="container">
+                            <div id="portfolio-section">
                                 <!-- Heading -->
                                 <?
                                 $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("collections-products", [
