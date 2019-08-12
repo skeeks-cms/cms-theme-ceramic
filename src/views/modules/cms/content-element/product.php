@@ -13,38 +13,37 @@ $.HSCore.components.HSRating.init($('.js-rating-show'), {
 });
 JS
 );
-$shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($model);
-$model = $shopProduct->cmsContentElement;
-$priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
+$collectionProduct = new \skeeks\cms\themes\ceramic\models\ProductCmsContentElement($model->toArray());
+$priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($collectionProduct);
 
-$reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
-$rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
+$reviews2Count = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews2Count');
+$rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
 ?>
 <div itemscope itemtype="http://schema.org/Product">
 <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper">
-    <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?><?= $priceHelper->basePrice->money; ?>"/>
-    <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
-    <meta itemprop="description" content="<?= $model->description_short?$model->description_short:'-'; ?>"/>
-    <meta itemprop="sku" content="<?= $model->id; ?>"/>
+    <meta itemprop="name" content="<?= \yii\helpers\Html::encode($collectionProduct->name); ?><?= $priceHelper->basePrice->money; ?>"/>
+    <link itemprop="url" href="<?= $collectionProduct->absoluteUrl; ?>"/>
+    <meta itemprop="description" content="<?= $collectionProduct->description_short?$collectionProduct->description_short:'-'; ?>"/>
+    <meta itemprop="sku" content="<?= $collectionProduct->id; ?>"/>
 
-    <? if ($model->relatedPropertiesModel->getAttribute('brand')) : ?>
-        <meta itemprop="brand" content="<?= $model->relatedPropertiesModel->getSmartAttribute('brand'); ?>"/>
+    <? if ($collectionProduct->relatedPropertiesModel->getAttribute('brand')) : ?>
+        <meta itemprop="brand" content="<?= $collectionProduct->relatedPropertiesModel->getSmartAttribute('brand'); ?>"/>
     <? else : ?>
         <meta itemprop="brand" content="<?=\Yii::$app->view->theme->title; ?>"/>
     <? endif; ?>
-    <? if ($model->relatedPropertiesModel->getAttribute('Element_Code')) : ?>
-        <meta itemprop="mpn" content="<?= $model->relatedPropertiesModel->getSmartAttribute('Element_Code'); ?>"/>
+    <? if ($collectionProduct->relatedPropertiesModel->getAttribute('Element_Code')) : ?>
+        <meta itemprop="mpn" content="<?= $collectionProduct->relatedPropertiesModel->getSmartAttribute('Element_Code'); ?>"/>
     <? endif; ?>
-    <? if ($model->image) : ?>
-        <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
+    <? if ($collectionProduct->image) : ?>
+        <link itemprop="image" href="<?= $collectionProduct->image->absoluteSrc; ?>">
     <? endif; ?>
     <div class="container g-py-20">
 
         <div class="row">
             <div class="col-md-12">
                 <?= $this->render('@app/views/breadcrumbs', [
-                    'model' => $model,
+                    'model' => $collectionProduct,
                     /*'isShowLast' => true,
                     'isShowH1'   => false,*/
                 ]); ?>
@@ -56,11 +55,11 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                 <div class="sx-product-images g-ml-40 g-mr-40">
                     <?
                     $images = [];
-                    if ($model->image) {
-                        $images[] = $model->image;
+                    if ($collectionProduct->image) {
+                        $images[] = $collectionProduct->image;
                     }
-                    if ($model->images) {
-                        $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
+                    if ($collectionProduct->images) {
+                        $images = \yii\helpers\ArrayHelper::merge($images, $collectionProduct->images);
                     }
                     ?>
                     <? if ($images) : ?>
@@ -81,8 +80,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                             'w' => 700,
                                             'h' => 500,
                                             'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                                        ]), $model->code
-                                    ); ?>" alt="<?= $model->name; ?>">
+                                        ]), $collectionProduct->code
+                                    ); ?>" alt="<?= $collectionProduct->name; ?>">
                                 </div>
                             <? endforeach; ?>
 
@@ -108,8 +107,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                                 'w' => 75,
                                                 'h' => 75,
                                                 'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                                            ]), $model->code
-                                        ); ?>" alt="<?= $model->name; ?>">
+                                            ]), $collectionProduct->code
+                                        ); ?>" alt="<?= $collectionProduct->name; ?>">
                                     </div>
                                 <? endforeach; ?>
                             </div>
@@ -128,7 +127,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
                                 <div class="js-slide g-bg-cover">
                                     <!--w-100-->
-                                    <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+                                    <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $collectionProduct->name; ?>">
                                 </div>
                         </div>
 
@@ -145,7 +144,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                         <div class="topmost-row">
                             <div class="row no-gutters">
                                 <div class="col-5">
-                                    <div data-product-id="<?= $model->id; ?>" class="item-lot">Код:&nbsp;<?= $model->id; ?></div>
+                                    <div data-product-id="<?= $collectionProduct->id; ?>" class="item-lot">Код:&nbsp;<?= $collectionProduct->id; ?></div>
                                 </div>
 
                                 <div class="col-7">
@@ -179,31 +178,27 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                         </div>
 
 
-                        <!--<h1 class="h3 g-color-gray-dark-v2" itemprop="name">
-                            <? /*= $model->name; */ ?>
-                        </h1>-->
-
                         <div class="product-price g-mt-10 g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                            <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
+                            <link itemprop="url" href="<?= $collectionProduct->absoluteUrl; ?>"/>
                             <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
                             <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
                             <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
                             <link itemprop="availability" href="http://schema.org/InStock">
 
-                            <span class="current ss-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->basePrice->money; ?> </span><? if ($model->relatedPropertiesModel->getAttribute('MainUnit')) : ?><span class="g-font-weight-600">за 1 <?=$model->relatedPropertiesModel->getSmartAttribute('MainUnit');?></span><? endif; ?>
+                            <span class="current ss-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->basePrice->money; ?> </span><? if ($collectionProduct->relatedPropertiesModel->getAttribute('MainUnit')) : ?><span class="g-font-weight-600">за 1 <?=$collectionProduct->relatedPropertiesModel->getSmartAttribute('MainUnit');?></span><? endif; ?>
                         </div>
 
 
-                        <? if ($shopProduct->quantity > 0) : ?>
+                        <? if ($collectionProduct->shopProduct->quantity > 0) : ?>
                             <div class="product-control g-mt-10">
                                 <div class="control-group group-submit g-mr-10 g-mb-15">
                                     <div class="buttons-row ">
-                                        <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
+                                        <? if ($collectionProduct->shopProduct->minProductPrice && $collectionProduct->shopProduct->minProductPrice->price == 0) : ?>
                                             <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
                                                 <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
                                                     'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
                                                     'type'    => 'button',
-                                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$collectionProduct->shopProduct->id}, 1); return false;"),
                                                 ]); ?>
                                             <? else : ?>
                                                 <a class="btn btn-xxl u-btn-primary g-rounded-50 g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
@@ -213,16 +208,16 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                             <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
                                                 'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
                                                 'type'    => 'button',
-                                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$collectionProduct->shopProduct->id}, 1); return false;"),
                                             ]); ?>
                                         <? endif; ?>
                                     </div>
                                     <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
 
-                                        <? if ($shopProduct->quantity > 10) : ?>
+                                        <? if ($collectionProduct->shopProduct->quantity > 10) : ?>
                                             <span class="row-label">В наличии более 10 шт.</span>
                                         <? else : ?>
-                                            <span class="row-label">В наличии:</span> <span class="row-value"><?= $shopProduct->quantity; ?> <? if ($model->relatedPropertiesModel->getAttribute('MainUnit')) : ?> <?=$model->relatedPropertiesModel->getSmartAttribute('MainUnit');?><? endif; ?></span>
+                                            <span class="row-label">В наличии:</span> <span class="row-value"><?= $collectionProduct->shopProduct->quantity; ?> <? if ($collectionProduct->relatedPropertiesModel->getAttribute('MainUnit')) : ?> <?=$collectionProduct->relatedPropertiesModel->getSmartAttribute('MainUnit');?><? endif; ?></span>
                                         <? endif; ?>
 
                                     </div>
@@ -232,7 +227,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
                             <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
                                 'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
-                                'product_id'       => $model->id,
+                                'product_id'       => $collectionProduct->id,
                                 'size'             => "modal-dialog-350",
                                 'success_modal_id' => 'readySubscribeModal',
                                 'id'               => 'modalWait',
@@ -254,9 +249,9 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
                         <? endif; ?>
 
-                        <? if ($model->description_short) : ?>
+                        <? if ($collectionProduct->description_short) : ?>
                             <div class="sx-description-short g-color-gray-dark-v4">
-                                <?= $model->description_short; ?>
+                                <?= $collectionProduct->description_short; ?>
                                 <p>
                                     <a href="#sx-description" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
                                         Подробнее
@@ -350,7 +345,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
             <?
 
             $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
-                'model'                   => $model,
+                'model'                   => $collectionProduct,
                 'visible_properties'      => @$visible_items,
                 'visible_only_has_values' => true,
                 'viewFile'                => '@app/views/widgets/RpWidget/default',
@@ -359,25 +354,18 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
             <? \skeeks\cms\rpViewWidget\RpViewWidget::end(); ?>
 
         </div>
-        <? if ($model->description_full) : ?>
+        <? if ($collectionProduct->description_full) : ?>
         <div class="col-md-12 sx-content" id="sx-description">
             <h2>Описание</h2>
-            <?= $model->description_full; ?>
+            <?= $collectionProduct->description_full; ?>
 
         </div>
         <? endif; ?>
     </div>
 </section>
 
-<? if ($model->relatedPropertiesModel->getAttribute('Collection_Id')) :
-    $collectionQuery = \skeeks\cms\models\CmsContentElement::find()
-        ->joinWith('relatedElementProperties map')
-        ->joinWith('relatedElementProperties.property property')
-        ->andWhere(['property.code'     => 'bauservice_collection_id'])
-        ->andWhere(['map.value'         => (int) $model->relatedPropertiesModel->getAttribute('Collection_Id')])
-        ;?>
-    <? if ($collectionQuery->exists()) :  ?>
-    <? foreach ($collectionQuery->all() as $collection) :
+<? if ($collectionProduct->collections) : ?>
+    <? foreach ($collectionProduct->collections as $collection) :
         /**
          * @var $collection \skeeks\cms\models\CmsContentElement
          */
@@ -397,16 +385,16 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                     <article class="u-block-hover">
                         <!-- Article Image -->
                         <div class="rounded">
-                            <? if ($model->image) : ?>
+                            <? if ($collectionProduct->image) : ?>
                             <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($collection->image ? $collection->image->src : null,
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
                                     'w' => 500,
                                     'h' => 383,
                                     'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                                ]), $model->code
+                                ]), $collectionProduct->code
                             ); ?>" title="<?= \yii\helpers\Html::encode($collection->name); ?>" alt="<?= \yii\helpers\Html::encode($collection->name); ?>" />
                             <? else : ?>
-                                <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+                                <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $collectionProduct->name; ?>">
                             <? endif; ?>
                         </div>
                         <!-- End Article Image -->
@@ -427,7 +415,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                         'enabledCurrentTreeChild'       => 'N',
                         'enabledCurrentTreeChildAll'    => 'N',
                         'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-                        'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($collection, $model) {
+                        'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($collection, $collectionProduct) {
                             if ($bauservice_collection_id = $collection->relatedPropertiesModel->getAttribute('bauservice_collection_id')) {
                                 $activeDataProvider->query->joinWith('relatedElementProperties map')
                                     ->joinWith('relatedElementProperties.property property')
@@ -444,7 +432,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                 $activeDataProvider->query->andWhere(['>','`pricesFilter`.price',0]);
                             }
 
-                            $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
+                            $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $collectionProduct->id]);
 
                         },
                     ]);
@@ -458,7 +446,6 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
     </section>
     <!-- End Product Blocks v4 -->
         <? endforeach; ?>
-    <? endif; ?>
 <? endif; ?>
 
 
@@ -473,7 +460,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
         $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
             'namespace'         => 'Reviews2Widget',
             'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-            'cmsContentElement' => $model,
+            'cmsContentElement' => $collectionProduct,
         ]);
         $widgetReviews::end();
         ?>
@@ -485,8 +472,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
         <? if (\Yii::$app->shop->shopContents) : ?>
             <?
             $treeIds = [];
-            if ($model->cmsTree && $model->cmsTree->parent) {
-                $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
+            if ($collectionProduct->cmsTree && $collectionProduct->cmsTree->parent) {
+                $treeIds = \yii\helpers\ArrayHelper::map($collectionProduct->cmsTree->parent->children, 'id', 'id');
             }
             ?>
             <div class="container g-mt-20 g-mb-40 ">
@@ -499,7 +486,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                     'tree_ids'             => $treeIds,
                     'limit'                => 15,
                     'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-                    'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
+                    'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($collectionProduct) {
                         $activeDataProvider->query->with('shopProduct');
                         $activeDataProvider->query->with('shopProduct.baseProductPrice');
                         $activeDataProvider->query->with('shopProduct.minProductPrice');
@@ -507,7 +494,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                         //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
                         //$activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
 
-                        $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
+                        $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $collectionProduct->id]);
 
                     },
                 ]);
@@ -522,8 +509,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
     <? if (\Yii::$app->shop->shopContents) : ?>
         <?
         $treeIds = [];
-        if ($model->cmsTree && $model->cmsTree->parent) {
-            $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
+        if ($collectionProduct->cmsTree && $collectionProduct->cmsTree->parent) {
+            $treeIds = \yii\helpers\ArrayHelper::map($collectionProduct->cmsTree->parent->children, 'id', 'id');
         }
         ?>
         <div class="container g-mt-20 g-mb-40 ">
@@ -538,8 +525,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                 'enabledCurrentTree'                => "N",
                 'limit'                => 15,
                 'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-                'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($model) {
-                    $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName() . ".id", $model->id]);
+                'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($collectionProduct) {
+                    $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName() . ".id", $collectionProduct->id]);
                     $query->leftJoin('shop_product', '`shop_product`.`id` = `cms_content_element`.`id`');
                     $query->leftJoin('shop_viewed_product', '`shop_viewed_product`.`shop_product_id` = `shop_product`.`id`');
                     $query->andWhere(['shop_fuser_id' => \Yii::$app->shop->shopFuser->id]);

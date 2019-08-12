@@ -10,14 +10,14 @@ use yii\helpers\ArrayHelper;
 
 /**
  *
- * @property CollectionCmsContentElement[] $cmsContentElementCollections
+ * @property CollectionCmsContentElement[] $collections
  */
 class ProductCmsContentElement extends ShopCmsContentElement
 {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCmsContentElementCollections()
+    public function getCollections()
     {
         return $this->hasMany(CollectionCmsContentElement::className(), ['id' => 'collection_id'])
             ->viaTable('ceramic_collection_map', ['product_id' => 'id'])
