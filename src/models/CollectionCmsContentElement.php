@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property ProductCmsContentElement $firstProduct Первый продукт связанной с коллекцией
  * @property ProductCmsContentElement $minPriceProduct Продукт с минимальной ценой
  * @property ProductCmsContentElement $notNullProduct Выбрать товары с ненулевыми ценами
+ * @property CeramicCollectionMap[] $ceramicCollectionMaps
  *
  * @property string $country Страна
  * @property string $brand Производитель
@@ -30,6 +31,14 @@ class CollectionCmsContentElement extends CmsContentElement
             ->viaTable('ceramic_collection_map', ['collection_id' => 'id'])
             ->from(['ceramicProductContentElement' => ProductCmsContentElement::tableName()])
             ;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCeramicCollectionMaps()
+    {
+        return $this->hasMany(CeramicCollectionMap::class, ['collection_id' => 'id']);
     }
 
     /**

@@ -21,7 +21,7 @@ CSS
                 <div class="col-lg-10 mt-auto">
                     <div class="mb-5">
                         <div class="lead g-color-white-opacity-0_8"><?= $this->render('@app/views/breadcrumbs', [
-                                'model' => $model,
+                                'model'    => $model,
                                 'isShowH1' => false,
                             ]) ?>
                         </div>
@@ -64,6 +64,8 @@ CSS
                             <div id="portfolio-section">
                                 <!-- Heading -->
                                 <?
+                                $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
+
                                 $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("collections-products", [
                                     'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-collections',
                                     'enabledPaging'        => "Y",
@@ -72,7 +74,6 @@ CSS
                                     'order'                => SORT_ASC,
                                     'contentElementClass'  => \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::class,
                                     'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
-                                    if (ENV == 'dev') {
 
 
                                         /**
@@ -81,93 +82,66 @@ CSS
                                         $query = $activeDataProvider->query;
                                         $query
                                             ->select([
-                                                \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName() . ".*",
+                                                \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().".*",
                                             ])
-                                            ->joinWith('products as p')
-                                            /*->joinWith('productCmsContentElements.shopProduct as shopProduct')
+                                            ->joinWith('products as p')/*->joinWith('productCmsContentElements.shopProduct as shopProduct')
                                             ->joinWith('productCmsContentElements.shopProduct.baseProductPrice as baseProductPrice')
                                             ->andWhere([">", "baseProductPrice.price", 0])*/
                                         ;
 
                                         $query->andWhere(['IS NOT', 'p.id', null]);
-                                        $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName() . '.image_id', NULL]);
+                                        $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().'.image_id', null]);
+
+                                        //$query->joinWith('ceramicCollectionMaps as ceramicCollectionMaps');
                                         
-                                        $query->joinWith('minPriceProduct');
+                                        /*$query->joinWith('minPriceProduct');
                                         $query->joinWith('minPriceProduct.shopProduct');
                                         $query->joinWith('minPriceProduct.shopProduct.baseProductPrice as baseProductPrice');
-                                        $query->orderBy(['baseProductPrice.price' => SORT_DESC]);
+                                        $query->orderBy(['baseProductPrice.price' => SORT_DESC]);*/
 
                                         /*print_r($query->one());die;*/
 
                                         //$activeDataProvider->query->orderBy([\skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName() . ".id"]);
-                                            
+
                                         /*$activeDataProvider->query
                                             ->andWhere(['IS NOT', 'p.id', null]);*/
 
                                         //var_dump($activeDataProvider->query->createCommand()->rawSql);die();
-                                    }
                                         //$activeDataProvider->query->andWhere(['IS NOT', 'image_id', NULL]);
                                         //$activeDataProvider->query->andWhere(['']);
-                                    }
+                                    },
                                 ]);
+
+                                $query = $widgetElements->dataProvider->query;
+                                $baseQuery = clone $query;
+
+
+                                $eavFiltersHandler = new \skeeks\cms\themes\ceramic\CollectionEavQueryFilterHandler([
+                                    'baseQuery' => $baseQuery,
+                                ]);
+                                $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
+                                $rpQuery = $eavFiltersHandler->getRPQuery();
+                                /*$rpQuery->andWhere([
+                                    'cmap.cms_content_id' => $model->tree_id,
+                                ]);*/
+                                /*$rpQuery->andWhere(
+                                    ['map.cms_tree_id' => $model->id]
+                                );*/
+                                $eavFiltersHandler->initRPByQuery($rpQuery);
+
+                                $filtersWidget
+                                    ->registerHandler($eavFiltersHandler);
+
+
+                                $filtersWidget->loadFromRequest();
+                                $filtersWidget->applyToQuery($query);
+
                                 $widgetElements::end();
                                 ?>
 
                             </div>
                             <!-- End Cube Portfolio Blocks - Content -->
 
-                            <?
-                            $contentFaq = \skeeks\cms\models\CmsContent::find()->where(['code' => 'faq'])->one();
-                            ?>
-                            <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
-                                'namespace' => 'ContentElementsCmsWidget-faq',
-                                'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
-                                'content_ids' => [
-                                    $contentFaq ? $contentFaq->id : ""
-                                ],
-                                'viewFile'  => '@app/views/widgets/ContentElementsCmsWidget/faq',
-                            ]); ?>
-
-
-                            <?= trim(\skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
-                                'namespace'       => 'TreeMenuCmsWidget-sub-catalog',
-                                'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/sub-catalog',
-                                'treePid'         => $model->id,
-                                'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
-                            ])); ?>
-
-                            <?
-                            $contentNews = \skeeks\cms\models\CmsContent::find()->where(['code' => 'news'])->one();
-                            ?>
-                            <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
-                                'namespace' => 'news',
-                                'content_ids' => [
-                                    $contentNews ? $contentNews->id : ""
-                                ],
-                                'viewFile'  => '@app/views/widgets/ContentElementsCmsWidget/' . $this->theme->news_list_view,
-                            ]); ?>
-
-                            <?
-                            $contentNews = \skeeks\cms\models\CmsContent::find()->where(['code' => 'gallery'])->one();
-                            ?>
-                            <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
-                                'namespace' => 'gallery',
-                                'content_ids' => [
-                                    $contentNews ? $contentNews->id : ""
-                                ],
-                                'viewFile'  => '@app/views/widgets/ContentElementsCmsWidget/gallery',
-                            ]); ?>
-
-                            <?
-                            $contentNews = \skeeks\cms\models\CmsContent::find()->where(['code' => 'review'])->one();
-                            ?>
-                            <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
-                                'namespace' => 'review',
-                                'content_ids' => [
-                                    $contentNews ? $contentNews->id : ""
-                                ],
-                                'viewFile'  => '@app/views/widgets/ContentElementsCmsWidget/review',
-                            ]); ?>
 
                             <? if ($model->images) : ?>
                                 <?= $this->render("@app/views/include/gallery", ['images' => $model->images]); ?>
@@ -176,18 +150,14 @@ CSS
                         </div>
 
 
-                        <? if ($this->theme->tree_content_layout == 'col-left') : ?>
-                            <?= $this->render("@app/views/include/col-left"); ?>
-                        <? endif; ?>
-                        <? if ($this->theme->tree_content_layout == 'col-right') : ?>
-                            <?= $this->render("@app/views/include/col-left"); ?>
-                        <? endif; ?>
-                        <? if ($this->theme->tree_content_layout == 'no-col') : ?>
+                        <div class="col-md-3 order-md-1 g-py-20 g-bg-secondary">
+                            <div class="g-mb-20">
+                                <? $filtersWidget::end(); ?>
+                                <div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
 
-                        <? endif; ?>
-                        <? if ($this->theme->tree_content_layout == 'col-left-right') : ?>
-                            <?= $this->render("@app/views/include/col-left"); ?>
-                        <? endif; ?>
+                                </div>
+                            </div>
+                        </div>
 
 
                     </div>
