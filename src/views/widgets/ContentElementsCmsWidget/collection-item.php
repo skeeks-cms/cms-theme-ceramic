@@ -5,11 +5,11 @@
  * @copyright 2010 SkeekS (СкикС)
  * @date 06.03.2015
  *
- * @var \v3toys\skeeks\models\V3toysProductContentElement $model
+ * @var \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement $model
  *
  */
 /* @var $this yii\web\View */
-
+$model->firstProduct
 ?>
 
 <div class="u-block-hover g-parent">
