@@ -62,14 +62,21 @@ if ($model->minPriceProduct) {
             <h2 class="h4 g-color-white g-font-weight-600 mb-3">
                 <a class="u-link-v5 g-brd-bottom g-brd-2 g-brd-white--hover g-color-white g-cursor-pointer g-pb-2" href="<?= $model->url; ?>"><?= $model->name; ?></a>
             </h2>
-            <h4 class="d-inline-block g-color-white-opacity-0_7 g-font-size-11 mb-0">
-                <?= $model->brand; ?>
-                <?= $model->country; ?>
+            <h4 class="g-color-white-opacity-0_7 g-font-size-13 mb-0">
+                Производитель: <?= $model->brand; ?>
             </h4>
-            <? if ($priceHelper) : ?>
+
+            <h4 class=" g-color-white-opacity-0_7 g-font-size-13 mb-0">
+                Страна: <?= $model->country; ?>
+            </h4>
+
+            <h4 class="g-color-white-opacity-0_7 g-font-size-13 mb-0">
+                Товаров: <?= $model->getProducts()->count(); ?> шт.
+            </h4>
+            <?/* if ($priceHelper) : ?>
                 <span class="g-color-white-opacity-0_7 g-pos-rel g-top-2 mx-2">&#183;</span>
                 <span class="g-color-white-opacity-0_7 g-font-size-10 text-uppercase">от <?= $priceHelper->basePrice->money;  ?></span>
-            <? endif; ?>
+            <? endif; */?>
 
         </div>
 
