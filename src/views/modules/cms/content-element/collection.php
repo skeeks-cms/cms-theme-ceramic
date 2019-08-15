@@ -346,7 +346,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                     <div class="col-lg-3 col-md-6 col-sm-6 item cbp-item identity <? if ($product->relatedPropertiesModel->getAttribute('Place_in_the_Collection')) : ?>id<?=$product->relatedPropertiesModel->getAttribute('Place_in_the_Collection'); ?><? endif; ?>">
                         <article class="card-prod h-100 to-cart-fly-wrapper">
                             <? if ($product->shopProduct && $product->shopProduct->baseProductPrice && $product->shopProduct->minProductPrice && $product->shopProduct->minProductPrice->id != $product->shopProduct->baseProductPrice->id) :
-                                $percent =  (int)(100-$product->shopProduct->minProductPrice->money->getAmount()*100/$shopProduct->baseProductPrice->money->getAmount()); ?>
+
+                                $percent = (int)($priceHelper->percent * 100); ?>
                                 <div class="card-prod--sale">
                                     <div><span class="number">-<?=(int)$percent;?></span><span class="percent">%</span></div>
                                     <div class="caption">скидка</div>
