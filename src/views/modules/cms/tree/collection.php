@@ -84,31 +84,17 @@ CSS
                                             ->select([
                                                 \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().".*",
                                             ])
-                                            ->joinWith('products as p')/*->joinWith('productCmsContentElements.shopProduct as shopProduct')
-                                            ->joinWith('productCmsContentElements.shopProduct.baseProductPrice as baseProductPrice')
-                                            ->andWhere([">", "baseProductPrice.price", 0])*/
-                                        ;
+                                            ->joinWith('products as p');
 
                                         $query->andWhere(['IS NOT', 'p.id', null]);
                                         $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().'.image_id', null]);
+/*
+                                        if (!\Yii::$app->shop->is_show_product_no_price) {
+                                            $query->joinWith('p.shopProduct.shopProductPrices as pricesFilter')
+                                                ->andWhere(['>','`pricesFilter`.price',0]);
+                                        }*/
 
-                                        //$query->joinWith('ceramicCollectionMaps as ceramicCollectionMaps');
-                                        
-                                        /*$query->joinWith('minPriceProduct');
-                                        $query->joinWith('minPriceProduct.shopProduct');
-                                        $query->joinWith('minPriceProduct.shopProduct.baseProductPrice as baseProductPrice');
-                                        $query->orderBy(['baseProductPrice.price' => SORT_DESC]);*/
 
-                                        /*print_r($query->one());die;*/
-
-                                        //$activeDataProvider->query->orderBy([\skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName() . ".id"]);
-
-                                        /*$activeDataProvider->query
-                                            ->andWhere(['IS NOT', 'p.id', null]);*/
-
-                                        //var_dump($activeDataProvider->query->createCommand()->rawSql);die();
-                                        //$activeDataProvider->query->andWhere(['IS NOT', 'image_id', NULL]);
-                                        //$activeDataProvider->query->andWhere(['']);
                                     },
                                 ]);
 
