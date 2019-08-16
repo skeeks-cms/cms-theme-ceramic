@@ -107,6 +107,10 @@ CSS
                                 ]);
                                 $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
                                 $rpQuery = $eavFiltersHandler->getRPQuery();
+
+                                if (\Yii::$app->shop->show_filter_property_ids) {
+                                    $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => \Yii::$app->shop->show_filter_property_ids]);
+                                }
                                 /*$rpQuery->andWhere([
                                     'cmap.cms_content_id' => $model->tree_id,
                                 ]);*/
