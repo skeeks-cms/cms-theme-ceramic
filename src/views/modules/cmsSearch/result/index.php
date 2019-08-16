@@ -52,9 +52,14 @@
                             },
                         ]);
 
-                        $query = $widgetElements->dataProvider->query;
-
-                        $widgetElements::end();
+                        $query = $widgetElements->dataProvider->query; ?>
+                        <? if ($query->exists()) : ?>
+                            <div class="text-center">
+                                <h2>По вашему запросу найдены коллекции:</h2>
+                            </div>
+                        <? endif; ?>
+                        <?
+                            $widgetElements::end();
                         ?>
 
                         <?
@@ -86,7 +91,11 @@
                         $query = $widgetElements->dataProvider->query;
 
                         ?>
-
+                        <? if ($query->exists()) : ?>
+                            <div class="text-center">
+                                <h2>По вашему запросу найдены товары:</h2>
+                            </div>
+                        <? endif; ?>
 
                         <? $widgetElements::end(); ?>
                     </div>
