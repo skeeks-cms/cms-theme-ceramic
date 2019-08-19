@@ -64,8 +64,8 @@
 
                         <?
 
-                        $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("shop-product-list", [
-                            'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-list',
+                        $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("shop-product-search-list", [
+                            'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-search-list',
                             'pageSize'             => 15,
                             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::className(),
                             'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider)
