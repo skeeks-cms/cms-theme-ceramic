@@ -212,15 +212,17 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
                                             ]); ?>
                                         <? endif; ?>
                                     </div>
-                                    <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
+                                    <? if (\Yii::$app->ceramic->is_show_quantity_product) : ?>
+                                        <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
 
-                                        <? if ($collectionProduct->shopProduct->quantity > 10) : ?>
-                                            <span class="row-label">В наличии более 10 шт.</span>
-                                        <? else : ?>
-                                            <span class="row-label">В наличии:</span> <span class="row-value"><?= $collectionProduct->shopProduct->quantity; ?> <? if ($collectionProduct->relatedPropertiesModel->getAttribute('MainUnit')) : ?> <?=$collectionProduct->relatedPropertiesModel->getSmartAttribute('MainUnit');?><? endif; ?></span>
-                                        <? endif; ?>
+                                            <? if ($collectionProduct->shopProduct->quantity > 10) : ?>
+                                                <span class="row-label">В наличии более 10 шт.</span>
+                                            <? else : ?>
+                                                <span class="row-label">В наличии:</span> <span class="row-value"><?= $collectionProduct->shopProduct->quantity; ?> <? if ($collectionProduct->relatedPropertiesModel->getAttribute('MainUnit')) : ?> <?=$collectionProduct->relatedPropertiesModel->getSmartAttribute('MainUnit');?><? endif; ?></span>
+                                            <? endif; ?>
 
-                                    </div>
+                                        </div>
+                                    <? endif; ?>
                                 </div>
                             </div>
                         <? else : ?>

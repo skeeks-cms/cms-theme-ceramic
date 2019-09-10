@@ -8,6 +8,9 @@
 return [
 
     'components' => [
+        'ceramic' => [
+            'class' => 'skeeks\cms\themes\ceramic\components\ShopComponent',
+        ],
 
         'cmsAgent' => [
             'commands' => [
