@@ -88,12 +88,10 @@ CSS
 
                                         $query->andWhere(['IS NOT', 'p.id', null]);
                                         $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().'.image_id', null]);
-/*
-                                        if (!\Yii::$app->shop->is_show_product_no_price) {
-                                            $query->joinWith('p.shopProduct.shopProductPrices as pricesFilter')
-                                                ->andWhere(['>','`pricesFilter`.price',0]);
-                                        }*/
 
+                                        if (!\Yii::$app->shop->is_show_product_no_price) {
+                                            $query->joinWith('hasPriceProducts');
+                                        }
 
                                     },
                                 ]);
