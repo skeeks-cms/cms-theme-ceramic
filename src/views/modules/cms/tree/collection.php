@@ -38,7 +38,7 @@ CSS
     <div class="container g-bg-white">
         <div class="row">
             <? if ($this->theme->tree_content_layout == 'col-left') : ?>
-                <div class="col-md-9 order-md-2 col-xs-push-12 g-py-20">
+                <div class="col-md-9 order-md-2 g-py-20">
             <? endif; ?>
                 <? if ($this->theme->tree_content_layout == 'col-right') : ?>
                     <div class="col-md-9 g-py-20">
@@ -47,7 +47,7 @@ CSS
                         <div class="col-md-12 g-py-20">
                     <? endif; ?>
                         <? if ($this->theme->tree_content_layout == 'col-left-right') : ?>
-                        <div class="col-md-7 order-md-2 order-xs-2 g-py-20">
+                        <div class="col-md-7 order-md-2 g-py-20">
                             <? endif; ?>
 
                             <? if (!$this->theme->is_image_body_begin) : ?>
@@ -137,7 +137,7 @@ CSS
                             <? endif; ?>
                             <?= $this->render("@app/views/include/bottom-block"); ?>
                         </div>
-                        <div class="col-md-3 order-md-1 col-xs-pull-12 g-py-20 g-bg-secondary">
+                        <div class="col-md-3 order-md-1 g-py-20 g-bg-secondary">
                             <div class="g-mb-20">
                                 <? $filtersWidget::end(); ?>
                                 <div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
