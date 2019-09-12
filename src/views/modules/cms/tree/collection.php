@@ -33,21 +33,91 @@ CSS
         </div>
     </section>
 <? endif; ?>
+<?
+$filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
+
+$widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("collections", [
+    'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-collections',
+    'enabledPaging'        => "Y",
+    'pageSize'             => 30,
+    'orderBy'              => 'name',
+    'order'                => SORT_ASC,
+    'contentElementClass'  => \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::class,
+    'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
+
+
+        /**
+         * @var $query \yii\db\ActiveQuery
+         */
+        $query = $activeDataProvider->query;
+        $query
+            ->select([
+                \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().".*",
+            ])
+            ->joinWith('products as p');
+
+        $query->andWhere(['IS NOT', 'p.id', null]);
+        $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().'.image_id', null]);
+
+        if (!\Yii::$app->shop->is_show_product_no_price) {
+            $query->joinWith('hasPriceProducts');
+        }
+
+    },
+]);
+
+$query = $widgetElements->dataProvider->query;
+$baseQuery = clone $query;
+
+
+$eavFiltersHandler = new \skeeks\cms\themes\ceramic\CollectionEavQueryFilterHandler([
+    'baseQuery' => $baseQuery,
+]);
+$eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
+$rpQuery = $eavFiltersHandler->getRPQuery();
+
+if (\Yii::$app->shop->show_filter_property_ids) {
+    $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => \Yii::$app->shop->show_filter_property_ids]);
+}
+/*$rpQuery->andWhere([
+    'cmap.cms_content_id' => $model->tree_id,
+]);*/
+/*$rpQuery->andWhere(
+    ['map.cms_tree_id' => $model->id]
+);*/
+$eavFiltersHandler->initRPByQuery($rpQuery);
+
+$filtersWidget
+    ->registerHandler($eavFiltersHandler);
+
+
+$filtersWidget->loadFromRequest();
+$filtersWidget->applyToQuery($query);
+
+?>
 
 <section class="g-mt-0 g-pb-0">
     <div class="container g-bg-white">
         <div class="row">
+            <div class="col-md-3 order-md-1 col-xs-pull-12 g-py-20 g-bg-secondary">
+                <div class="g-mb-20">
+                    <? $filtersWidget::end(); ?>
+                    <div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
+
+                    </div>
+                </div>
+            </div>
             <? if ($this->theme->tree_content_layout == 'col-left') : ?>
-            <div class="col-md-9 order-md-2 g-py-20">
-                <? endif; ?>
+                <div class="col-md-9 order-md-2 col-xs-push-12 g-py-20">
+            <? endif; ?>
                 <? if ($this->theme->tree_content_layout == 'col-right') : ?>
-                <div class="col-md-9 g-py-20">
-                    <? endif; ?>
+                    <div class="col-md-9 g-py-20">
+                <? endif; ?>
                     <? if ($this->theme->tree_content_layout == 'no-col') : ?>
-                    <div class="col-md-12 g-py-20">
-                        <? endif; ?>
+                        <div class="col-md-12 g-py-20">
+                    <? endif; ?>
                         <? if ($this->theme->tree_content_layout == 'col-left-right') : ?>
-                        <div class="col-md-7  order-md-2 g-py-20">
+                        <div class="col-md-7 order-md-2 order-xs-2 g-py-20">
                             <? endif; ?>
 
                             <? if (!$this->theme->is_image_body_begin) : ?>
@@ -64,68 +134,7 @@ CSS
                             <div id="portfolio-section">
                                 <!-- Heading -->
                                 <?
-                                $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
-
-                                $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("collections", [
-                                    'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-collections',
-                                    'enabledPaging'        => "Y",
-                                    'pageSize'             => 30,
-                                    'orderBy'              => 'name',
-                                    'order'                => SORT_ASC,
-                                    'contentElementClass'  => \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::class,
-                                    'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
-
-
-                                        /**
-                                         * @var $query \yii\db\ActiveQuery
-                                         */
-                                        $query = $activeDataProvider->query;
-                                        $query
-                                            ->select([
-                                                \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().".*",
-                                            ])
-                                            ->joinWith('products as p');
-
-                                        $query->andWhere(['IS NOT', 'p.id', null]);
-                                        $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().'.image_id', null]);
-
-                                        if (!\Yii::$app->shop->is_show_product_no_price) {
-                                            $query->joinWith('hasPriceProducts');
-                                        }
-
-                                    },
-                                ]);
-
-                                $query = $widgetElements->dataProvider->query;
-                                $baseQuery = clone $query;
-
-
-                                $eavFiltersHandler = new \skeeks\cms\themes\ceramic\CollectionEavQueryFilterHandler([
-                                    'baseQuery' => $baseQuery,
-                                ]);
-                                $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
-                                $rpQuery = $eavFiltersHandler->getRPQuery();
-
-                                if (\Yii::$app->shop->show_filter_property_ids) {
-                                    $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => \Yii::$app->shop->show_filter_property_ids]);
-                                }
-                                /*$rpQuery->andWhere([
-                                    'cmap.cms_content_id' => $model->tree_id,
-                                ]);*/
-                                /*$rpQuery->andWhere(
-                                    ['map.cms_tree_id' => $model->id]
-                                );*/
-                                $eavFiltersHandler->initRPByQuery($rpQuery);
-
-                                $filtersWidget
-                                    ->registerHandler($eavFiltersHandler);
-
-
-                                $filtersWidget->loadFromRequest();
-                                $filtersWidget->applyToQuery($query);
-
-                                $widgetElements::end();
-                                ?>
+                                $widgetElements::end(); ?>
 
                             </div>
                             <!-- End Cube Portfolio Blocks - Content -->
@@ -135,16 +144,6 @@ CSS
                                 <?= $this->render("@app/views/include/gallery", ['images' => $model->images]); ?>
                             <? endif; ?>
                             <?= $this->render("@app/views/include/bottom-block"); ?>
-                        </div>
-
-
-                        <div class="col-md-3 order-md-1 g-py-20 g-bg-secondary">
-                            <div class="g-mb-20">
-                                <? $filtersWidget::end(); ?>
-                                <div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
-
-                                </div>
-                            </div>
                         </div>
 
 
