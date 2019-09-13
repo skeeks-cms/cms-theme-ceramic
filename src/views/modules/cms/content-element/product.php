@@ -212,7 +212,7 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
                                             ]); ?>
                                         <? endif; ?>
                                     </div>
-                                    <? if (\Yii::$app->ceramic->is_show_quantity_product) : ?>
+                                    <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
                                         <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
 
                                             <? if ($collectionProduct->shopProduct->quantity > 10) : ?>
