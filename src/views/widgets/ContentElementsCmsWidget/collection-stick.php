@@ -62,7 +62,8 @@ $query = $widget->dataProvider->query;
             ],
         ],
         'itemOptions'  => [
-            'tag' => false,
+            'tag' => 'div',
+            'class' =>  'g-px-10'
         ],
         'layout'       => '{items}',
     ]) ?>
