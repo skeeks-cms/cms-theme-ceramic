@@ -85,7 +85,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
         <?
         $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-new-collection", [
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/collection-stick',
-            'label'                => "Популярные товары",
+            'label'                => "Новые коллекции",
             'enabledPaging'        => "N",
             'enabledRunCache'      => "N",
             //'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
