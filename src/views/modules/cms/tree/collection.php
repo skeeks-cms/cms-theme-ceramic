@@ -66,6 +66,8 @@ CSS
                                 <a href="#" class="sx-btn-filter btn btn-large btn-primary">Фильтры</a>
                                 <?
                                 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
+                                $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
+                                $availabilityFiltersHandler->value = (int)\Yii::$app->shop->is_show_product_only_quantity;
 
                                 $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("collections", [
                                     'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-collections',
@@ -124,7 +126,15 @@ CSS
 
                                 $filtersWidget->loadFromRequest();
                                 $filtersWidget->applyToQuery($query);
+                                ?>
 
+
+                                <?= $this->render('@app/views/filters/sorts', [
+                                    'filtersWidget'              => $filtersWidget,
+                                    'sortFiltersHandler'         => $sortFiltersHandler,
+                                ]); ?>
+
+                                <?
                                 $widgetElements::end();
                                 ?>
 
