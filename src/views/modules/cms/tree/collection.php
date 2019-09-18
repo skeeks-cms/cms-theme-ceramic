@@ -131,7 +131,7 @@ CSS
 
                                 <?= $this->render('@app/views/filters/sorts', [
                                     'filtersWidget'              => $filtersWidget,
-                                    'sortFiltersHandler'         => $sortFiltersHandler,
+                                    'sortFiltersHandler'         => null,
                                 ]); ?>
 
                                 <?
