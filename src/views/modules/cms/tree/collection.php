@@ -38,16 +38,16 @@ CSS
     <div class="container g-bg-white">
         <div class="row">
             <? if ($this->theme->tree_content_layout == 'col-left') : ?>
-            <div class="col-md-9 order-md-2 g-py-20">
-                <? endif; ?>
+                <div class="col-md-9 order-md-2 g-py-20">
+            <? endif; ?>
                 <? if ($this->theme->tree_content_layout == 'col-right') : ?>
-                <div class="col-md-9 g-py-20">
-                    <? endif; ?>
+                    <div class="col-md-9 g-py-20">
+                <? endif; ?>
                     <? if ($this->theme->tree_content_layout == 'no-col') : ?>
-                    <div class="col-md-12 g-py-20">
-                        <? endif; ?>
+                        <div class="col-md-12 g-py-20">
+                    <? endif; ?>
                         <? if ($this->theme->tree_content_layout == 'col-left-right') : ?>
-                        <div class="col-md-7  order-md-2 g-py-20">
+                        <div class="col-md-7 order-md-2 g-py-20">
                             <? endif; ?>
 
                             <? if (!$this->theme->is_image_body_begin) : ?>
@@ -63,8 +63,11 @@ CSS
                             <!-- Cube Portfolio Blocks - Content -->
                             <div id="portfolio-section">
                                 <!-- Heading -->
+                                <a href="#" class="sx-btn-filter btn btn-large btn-primary">Фильтры</a>
                                 <?
                                 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
+                                $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
+                                $availabilityFiltersHandler->value = (int)\Yii::$app->shop->is_show_product_only_quantity;
 
                                 $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("collections", [
                                     'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-collections',
@@ -88,12 +91,10 @@ CSS
 
                                         $query->andWhere(['IS NOT', 'p.id', null]);
                                         $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().'.image_id', null]);
-/*
-                                        if (!\Yii::$app->shop->is_show_product_no_price) {
-                                            $query->joinWith('p.shopProduct.shopProductPrices as pricesFilter')
-                                                ->andWhere(['>','`pricesFilter`.price',0]);
-                                        }*/
 
+                                        if (!\Yii::$app->shop->is_show_product_no_price) {
+                                            $query->joinWith('hasPriceProducts');
+                                        }
 
                                     },
                                 ]);
@@ -125,7 +126,15 @@ CSS
 
                                 $filtersWidget->loadFromRequest();
                                 $filtersWidget->applyToQuery($query);
+                                ?>
 
+
+                                <?= $this->render('@app/views/filters/sorts', [
+                                    'filtersWidget'              => $filtersWidget,
+                                    'sortFiltersHandler'         => null,
+                                ]); ?>
+
+                                <?
                                 $widgetElements::end();
                                 ?>
 
@@ -138,8 +147,6 @@ CSS
                             <? endif; ?>
                             <?= $this->render("@app/views/include/bottom-block"); ?>
                         </div>
-
-
                         <div class="col-md-3 order-md-1 g-py-20 g-bg-secondary">
                             <div class="g-mb-20">
                                 <? $filtersWidget::end(); ?>
@@ -148,7 +155,6 @@ CSS
                                 </div>
                             </div>
                         </div>
-
 
                     </div>
                 </div>

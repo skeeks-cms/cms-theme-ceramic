@@ -24,7 +24,7 @@
         ],
         'itemOptions' => [
             'tag' => 'div',
-            'class' => 'col-sm-6 col-lg-4 g-px-10 g-mb-10 item'
+            'class' => 'col-sm-6 col-lg-4 g-px-5 g-mb-10 item'
         ],
         'pager'        => [
             'class' => \skeeks\cms\themes\unify\widgets\ScrollAndSpPager::class
