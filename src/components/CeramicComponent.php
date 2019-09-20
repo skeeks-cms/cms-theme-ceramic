@@ -49,13 +49,13 @@ class CeramicComponent extends Component
      * Показывать слайдер с популярными коллекциями на главной?
      * @var int
      */
-    public $is_show_popular_collection = 0;
+    public $is_show_popular_collection = 1;
 
     /**
      * Показывать слайдер с новыми коллекциями на главной?
      * @var int
      */
-    public $is_show_new_collection = 0;
+    public $is_show_new_collection = 1;
 
     /**
      * Можно задать название и описание компонента
