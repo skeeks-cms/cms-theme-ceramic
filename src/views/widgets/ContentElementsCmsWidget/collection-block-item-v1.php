@@ -24,7 +24,7 @@ if ($model->minPriceProduct) {
                     'h' => 230,
                     //'m' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                 ]), $model->code
-            ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>">
+            ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>" style="width: 100%;">
         <? else : ?>
             <img class="img-fluid g-transform-scale-1_1--parent-hover g-transition-0_5 g-transition--ease-in-out" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
         <? endif; ?>
@@ -38,6 +38,6 @@ if ($model->minPriceProduct) {
 
         </div>
         <hr class="g-brd-gray-light-v4 g-my-10">
-        <div class="text-center h6 g-mb-10">Товаров: <?= $model->getProducts()->count(); ?>шт.</div>
+        <div class="text-center h6 g-mb-10">Товаров: <?= $model->getProducts()->count(); ?> шт.</div>
     </div>
 </div>
