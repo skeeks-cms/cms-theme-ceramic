@@ -20,11 +20,11 @@ if ($model->minPriceProduct) {
         <? if ($model->image) : ?>
             <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                 new \skeeks\cms\components\imaging\filters\Thumbnail([
-                    'w' => 306,
-                    'h' => 206,
+                    'w' => 345,
+                    'h' => 230,
                     //'m' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                 ]), $model->code
-            ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>">
+            ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>" style="width: 100%;">
         <? else : ?>
             <img class="img-fluid g-transform-scale-1_1--parent-hover g-transition-0_5 g-transition--ease-in-out" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
         <? endif; ?>
@@ -32,11 +32,12 @@ if ($model->minPriceProduct) {
     <div class="g-pt-15 g-px-15">
         <a class="h5 g-font-weight-600" href="<?= $model->url; ?>"><?= $model->name; ?></a>
 
-        <div class="row">
-            <div class="col-sm-6 col-6"><a class="tile__brand" href="<?= $model->url; ?>"><?= $model->brand; ?></a></div>
-            <div class="col-sm-6 col-6 text-right"><span class="tile__country"><?= $model->country; ?></span></div>
+        <div class="g-nowrap" style="overflow: hidden">
+            <div class="pull-right"><?= $model->country; ?></div>
+            <a class="pull-left" href="<?= $model->url; ?>"><?= $model->brand; ?></a>
+
         </div>
         <hr class="g-brd-gray-light-v4 g-my-10">
-        <div class="text-center h6 g-mb-10">Товаров: <?= $model->getProducts()->count(); ?>шт.</div>
+        <div class="text-center h6 g-mb-10">Товаров: <?= $model->getProducts()->count(); ?> шт.</div>
     </div>
 </div>

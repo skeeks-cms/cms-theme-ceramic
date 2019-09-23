@@ -24,7 +24,7 @@ if (!\Yii::$app->shop->is_show_product_no_price)   {
 
     <? echo \yii\widgets\ListView::widget([
         'dataProvider' => $widget->dataProvider,
-        'itemView'     => 'product-stick-item',
+        'itemView'     => 'product-stick-item-'.  \Yii::$app->ceramic->collection_item_view,
         'emptyText'    => '',
         'options'      => [
             'class' => 'js-carousel g-pb-0 g-mx-minus-10',
