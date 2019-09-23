@@ -57,7 +57,7 @@ class CeramicComponent extends Component
      */
     public $is_show_new_collection = 1;
 
-    public $collection = 'v2';
+    public $collection_item_view = 'v2';
 
     /**
      * Можно задать название и описание компонента
@@ -80,7 +80,7 @@ class CeramicComponent extends Component
                 ],
                 'boolean',
             ],
-            ['collection', 'string']
+            ['collection_item_view', 'string']
         ]);
     }
 
@@ -103,7 +103,7 @@ class CeramicComponent extends Component
                         'allowNull' => false,
                         'formElement' => BoolField::ELEMENT_RADIO_LIST,
                     ],
-                    'collection' => [
+                    'collection_item_view' => [
                         'class' => SelectField::class,
                         'items' => [
                             'v1' => 'Вариант 1 (маленькие блоки как на tesser.ru)',
