@@ -57,6 +57,8 @@ class CeramicComponent extends Component
      */
     public $is_show_new_collection = 1;
 
+    public $collection_item_view = 'v2';
+
     /**
      * Можно задать название и описание компонента
      * @return array
@@ -78,6 +80,7 @@ class CeramicComponent extends Component
                 ],
                 'boolean',
             ],
+            ['collection_item_view', 'string']
         ]);
     }
 
@@ -100,7 +103,13 @@ class CeramicComponent extends Component
                         'allowNull' => false,
                         'formElement' => BoolField::ELEMENT_RADIO_LIST,
                     ],
-
+                    'collection_item_view' => [
+                        'class' => SelectField::class,
+                        'items' => [
+                            'v1' => 'Вариант 1 (маленькие блоки как на tesser.ru)',
+                            'v2' => 'Вариант 2 (Большие фото со всплывающей кнопкой Подробнее)',
+                        ],
+                    ],
 
                 ],
             ],
@@ -111,7 +120,8 @@ class CeramicComponent extends Component
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
                 'is_show_popular_collection' => 'Показывать слайдер с популярными коллекциями на главной?',
-                'is_show_new_collection' => 'Показывать слайдер с новыми коллекциями на главной?'
+                'is_show_new_collection' => 'Показывать слайдер с новыми коллекциями на главной?',
+                'collection_item_view'             => "Вариант отображения коллекции",
             ]
         );
     }

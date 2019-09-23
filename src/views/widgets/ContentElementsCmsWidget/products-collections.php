@@ -16,7 +16,7 @@
 
     <? echo \yii\widgets\ListView::widget([
         'dataProvider' => $widget->dataProvider,
-        'itemView'     => 'collection-block-item',
+        'itemView'     => 'collection-block-item-'.  \Yii::$app->ceramic->collection_item_view,
         'emptyText'    => '',
         'options'      => [
             'class' => '',

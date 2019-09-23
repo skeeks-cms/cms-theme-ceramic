@@ -63,7 +63,7 @@ CSS
                             <!-- Cube Portfolio Blocks - Content -->
                             <div id="portfolio-section">
                                 <!-- Heading -->
-                                <a href="#" class="sx-btn-filter btn btn-large btn-primary">Фильтры</a>
+                                <a href="#" class="sx-btn-filter btn btn-block g-valign-middle text-left">Фильтры <i class="fa fa-angle-down pull-right g-pt-5" aria-hidden="true"></i></a>
                                 <?
                                 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
                                 $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
