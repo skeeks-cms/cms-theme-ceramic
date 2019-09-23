@@ -21,7 +21,7 @@ $query = $widget->dataProvider->query;
 
     <? echo \yii\widgets\ListView::widget([
         'dataProvider' => $widget->dataProvider,
-        'itemView'     => 'collection-block-item',
+        'itemView'     => 'collection-block-item-'.  \Yii::$app->ceramic->collection_item_view,
         'emptyText'    => '',
         'options'      => [
             'class' => 'js-carousel g-pb-0 g-mx-minus-10',
