@@ -121,7 +121,7 @@ class CeramicComponent extends Component
         return ArrayHelper::merge(parent::attributeLabels(), [
                 'is_show_popular_collection' => 'Показывать слайдер с популярными коллекциями на главной?',
                 'is_show_new_collection' => 'Показывать слайдер с новыми коллекциями на главной?',
-                'collection'             => "Вариант отображения коллекции",
+                'collection_item_view'             => "Вариант отображения коллекции",
             ]
         );
     }
