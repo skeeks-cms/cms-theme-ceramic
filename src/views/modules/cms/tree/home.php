@@ -8,39 +8,87 @@
 /* @var $this yii\web\View */
 \skeeks\cms\themes\unify\assets\UnifyThemeAsset::register($this);
 ?>
-<?
 
-$catalog = \skeeks\cms\models\CmsTree::find()->where([
-    'dir' => 'catalog',
-])->andWhere([
-    '>',
-    'image_id',
-    0,
-])->one();
-if (\Yii::$app->mobileDetect->isMobile) {
+
+
+<? if (\Yii::$app->ceramic->is_show_home_slider) : ?>
+
+<?
+$content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide'])->one();
+?>
+<?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
+    'namespace'          => 'home-slider',
+    'enabledCurrentTree' => 'N',
+    'orderBy' => 'priority',
+    'order' => SORT_ASC,
+    'enabledRunCache'    => \skeeks\cms\components\Cms::BOOL_N,
+    'content_ids'        => [
+        $content ? $content->id : "",
+    ],
+    'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/slider-revo-no-full',
+]); ?>
+
+<? endif; ?>
+
+
+
+<? if (\Yii::$app->ceramic->is_show_home_modern_catalog) : ?>
+    <?
+
+    $catalog = \skeeks\cms\models\CmsTree::find()->where([
+        'dir' => 'catalog',
+    ])->andWhere([
+        '>',
+        'image_id',
+        0,
+    ])->one();
+    if (\Yii::$app->mobileDetect->isMobile) {
+
+        $widget = \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::begin([
+            'namespace'       => 'mobile-home-catalog-small',
+            'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/sub-catalog-small',
+            'treeParentCode'  => "catalog",
+            'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
+        ]);
+        $widget->activeQuery->with('image');
+        \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::end();
+    } else {
+
+
+        echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
+            'namespace'       => 'home-tree-slider',
+            'enabledRunCache' => "N",
+            'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/revolution-slider',
+            'treeParentCode'  => "catalog",
+            //'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
+        ]);
+    }
+
+    ?>
+<? endif; ?>
+
+<? if (\Yii::$app->ceramic->is_show_home_old_catalog) : ?>
+<?
+    $catalog = \skeeks\cms\models\CmsTree::find()->where([
+        'dir' => 'catalog',
+    ])->andWhere([
+        '>',
+        'image_id',
+        0,
+    ])->one();
 
     $widget = \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::begin([
-        'namespace'       => 'mobile-home-catalog-small',
-        'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/sub-catalog-small',
-        'treeParentCode'         => "catalog",
-        'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
-    ]);
-    $widget->activeQuery->with('image');
-    \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::end();
-} else {
+            'namespace'       => 'is_show_home_old_catalog-small',
+            'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/sub-catalog-small',
+            'treeParentCode'  => "catalog",
+            'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
+        ]);
+        $widget->activeQuery->with('image');
+        \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::end();
+    ?>
+<? endif; ?>
 
 
-    echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
-        'namespace'       => 'home-tree-slider',
-        'enabledRunCache' => "N",
-        'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/revolution-slider',
-        'treeParentCode'         => "catalog",
-        //'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
-    ]);
-}
-
-
-?>
 <? if (\Yii::$app->ceramic->is_show_popular_collection) : ?>
     <div class="container g-mt-40 g-mb-40">
         <?

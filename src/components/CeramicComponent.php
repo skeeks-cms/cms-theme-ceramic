@@ -57,6 +57,19 @@ class CeramicComponent extends Component
      */
     public $is_show_new_collection = 1;
 
+    /*
+     * Показывать современный каталог на главной
+     */
+    public $is_show_home_modern_catalog = 1;
+    /*
+     * Показывать обычный каталог на главной
+     */
+    public $is_show_home_old_catalog = 0;
+    /*
+     * Показывать обычный слайдер на главной
+     */
+    public $is_show_home_slider = 0;
+
     public $collection_item_view = 'v2';
 
     /**
@@ -77,6 +90,10 @@ class CeramicComponent extends Component
                 [
                     'is_show_popular_collection',
                     'is_show_new_collection',
+
+                    'is_show_home_modern_catalog',
+                    'is_show_home_old_catalog',
+                    'is_show_home_slider',
                 ],
                 'boolean',
             ],
@@ -103,6 +120,21 @@ class CeramicComponent extends Component
                         'allowNull' => false,
                         'formElement' => BoolField::ELEMENT_RADIO_LIST,
                     ],
+                    'is_show_home_modern_catalog' => [
+                        'class' => BoolField::class,
+                        'allowNull' => false,
+                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
+                    ],
+                    'is_show_home_old_catalog' => [
+                        'class' => BoolField::class,
+                        'allowNull' => false,
+                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
+                    ],
+                    'is_show_home_slider' => [
+                        'class' => BoolField::class,
+                        'allowNull' => false,
+                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
+                    ],
                     'collection_item_view' => [
                         'class' => SelectField::class,
                         'items' => [
@@ -122,6 +154,10 @@ class CeramicComponent extends Component
                 'is_show_popular_collection' => 'Показывать слайдер с популярными коллекциями на главной?',
                 'is_show_new_collection' => 'Показывать слайдер с новыми коллекциями на главной?',
                 'collection_item_view'             => "Вариант отображения коллекции",
+
+                'is_show_home_modern_catalog'=> "Показывать современный каталог на главной",
+                'is_show_home_old_catalog'=> "Показывать обычный каталог на главной",
+                'is_show_home_slider'=> "Показывать слайдер на главной",
             ]
         );
     }
