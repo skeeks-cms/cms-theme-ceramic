@@ -147,11 +147,11 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                 </div>
 
                                 <div class="col-7">
-                                    <div class="feedback-review cf pull-right">
-                                        <div class="product-rating pull-right">
+                                    <div class="feedback-review cf float-right">
+                                        <div class="product-rating float-right">
                                             <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
                                         </div>
-                                        <div class="sx-feedback-links pull-right g-mr-10">
+                                        <div class="sx-feedback-links float-right g-mr-10">
                                             <a href="#sx-reviews" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed  g-brd-primary--hover g-color-primary--hover">
                                                 <?
                                                 echo \Yii::t(
@@ -501,7 +501,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
     <div class="container">
 
         <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <div class="pull-right"><a href="#showReviewFormBlock"  data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div><h2>Отзывы</h2>
+            <div class="float-right"><a href="#showReviewFormBlock"  data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div><h2>Отзывы</h2>
         </div>
 
         <?
