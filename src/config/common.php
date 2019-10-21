@@ -20,6 +20,11 @@ return [
                     'name'     => 'Сортировка товаров по коллекциям',
                     'interval' => 3600 * 6,
                 ],
+                'ceramic/image/optimization' => [
+                    'class'    => \skeeks\cms\agent\CmsAgent::class,
+                    'name'     => 'Оптимизация картинок',
+                    'interval' => 3600 * 24,
+                ],
             ],
         ],
 
