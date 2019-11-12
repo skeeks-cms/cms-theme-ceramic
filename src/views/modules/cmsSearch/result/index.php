@@ -32,6 +32,7 @@
                             'contentElementClass'  => \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::class,
                             'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) {
 
+                                \Yii::$app->cmsSearch->buildElementsQuery($activeDataProvider->query);
 
                                 /**
                                  * @var $query \yii\db\ActiveQuery
@@ -46,7 +47,7 @@
                                 $query->andWhere(['IS NOT', 'p.id', null]);
                                 $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().'.image_id', null]);
 
-                                $query->andWhere(['LIKE', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName() . '.name', \Yii::$app->cmsSearch->searchQuery]);
+                                //$query->andWhere(['LIKE', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName() . '.name', \Yii::$app->cmsSearch->searchQuery]);
 
 
                             },
@@ -72,6 +73,9 @@
                             {
                                 //$activeDataProvider->query->with('relatedProperties');
 
+                                \Yii::$app->cmsSearch->buildElementsQuery($activeDataProvider->query);
+                                \Yii::$app->cmsSearch->logResult($activeDataProvider);
+
                                 $activeDataProvider->query->with('shopProduct');
                                 $activeDataProvider->query->with('shopProduct.baseProductPrice');
                                 $activeDataProvider->query->with('shopProduct.minProductPrice');
@@ -83,7 +87,7 @@
                                     'sProduct.product_type',
                                     \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
                                 ]);
-                                $activeDataProvider->query->where(['OR', ['LIKE', \skeeks\cms\shop\models\ShopCmsContentElement::tableName() . '.name', \Yii::$app->cmsSearch->searchQuery],['LIKE',\skeeks\cms\shop\models\ShopCmsContentElement::tableName() . '.description_short', \Yii::$app->cmsSearch->searchQuery],['LIKE',\skeeks\cms\shop\models\ShopCmsContentElement::tableName() . '.description_full', \Yii::$app->cmsSearch->searchQuery]]);
+                                //$activeDataProvider->query->where(['OR', ['LIKE', \skeeks\cms\shop\models\ShopCmsContentElement::tableName() . '.name', \Yii::$app->cmsSearch->searchQuery],['LIKE',\skeeks\cms\shop\models\ShopCmsContentElement::tableName() . '.description_short', \Yii::$app->cmsSearch->searchQuery],['LIKE',\skeeks\cms\shop\models\ShopCmsContentElement::tableName() . '.description_full', \Yii::$app->cmsSearch->searchQuery]]);
                             },
 
                         ]);
