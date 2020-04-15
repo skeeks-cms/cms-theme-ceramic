@@ -8,7 +8,7 @@
 return [
 
     'components' => [
-        'formatter' => [
+        /*'formatter' => [
 
             //'currencyCode' => 'RUB',
             'numberFormatterOptions' => [
@@ -16,10 +16,10 @@ return [
                 NumberFormatter::MAX_FRACTION_DIGITS => 2,
             ],
             'numberFormatterSymbols' => [
-                /*NumberFormatter::CURRENCY_SYMBOL => '<span>₽</span>',*/
+                /*NumberFormatter::CURRENCY_SYMBOL => '<span>₽</span>',
                 NumberFormatter::CURRENCY_SYMBOL => '<span>р.</span>',
             ],
-        ],
+        ],*/
     ],
 
 ];
