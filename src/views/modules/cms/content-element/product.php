@@ -24,7 +24,8 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
         <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper">
             <meta itemprop="name" content="<?= \yii\helpers\Html::encode($collectionProduct->name); ?><?= $priceHelper->basePrice->money; ?>"/>
             <link itemprop="url" href="<?= $collectionProduct->absoluteUrl; ?>"/>
-            <meta itemprop="description" content="<?= $collectionProduct->description_short ? \yii\helpers\Html::encode($collectionProduct->description_short) : '-'; ?>"/>1111
+            <meta itemprop="description" content="<?= $collectionProduct->description_short ? \yii\helpers\Html::encode($collectionProduct->description_short) : '-'; ?>"/>
+            1111
             <meta itemprop="sku" content="<?= $collectionProduct->id; ?>"/>
 
             <? if ($collectionProduct->relatedPropertiesModel->getAttribute('brand')) : ?>
@@ -466,36 +467,40 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
             </div>
         </section>
     </div>
-    <section class="g-brd-gray-light-v4 g-brd-top">
 
-        <? if (\Yii::$app->shop->shopContents) : ?>
-            <?
-            $treeIds = [];
-            if ($collectionProduct->cmsTree && $collectionProduct->cmsTree->parent) {
-                $treeIds = \yii\helpers\ArrayHelper::map($collectionProduct->cmsTree->parent->children, 'id', 'id');
-            }
-            ?>
+
+<? if (\Yii::$app->shop->shopContents) : ?>
+
+    <?
+    $treeIds = [];
+    if ($collectionProduct->cmsTree && $collectionProduct->cmsTree->parent) {
+        $treeIds = \yii\helpers\ArrayHelper::map($collectionProduct->cmsTree->parent->children, 'id', 'id');
+    }
+    $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-similar-products", [
+        'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+        'label'                => "Рекомендуем также",
+        'enabledPaging'        => "N",
+        'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+        'tree_ids'             => $treeIds,
+        'limit'                => 15,
+        'contentElementClass'  => \skeeks\cms\themes\ceramic\models\ProductCmsContentElement::class,
+        'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($collectionProduct) {
+
+            $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $collectionProduct->id]);
+
+        },
+    ]);
+
+    ?>
+
+    <? if ($widgetElements->dataProvider->query->count()) : ?>
+        <section class="g-brd-gray-light-v4 g-brd-top">111
             <div class="container g-mt-20 g-mb-40 ">
-                <?
-                $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-similar-products", [
-                    'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
-                    'label'                => "Рекомендуем также",
-                    'enabledPaging'        => "N",
-                    'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
-                    'tree_ids'             => $treeIds,
-                    'limit'                => 15,
-                    'contentElementClass'  => \skeeks\cms\themes\ceramic\models\ProductCmsContentElement::class,
-                    'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($collectionProduct) {
-
-                        $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $collectionProduct->id]);
-
-                    },
-                ]);
-                $widgetElements::end();
-                ?>
+                <? $widgetElements::end(); ?>
             </div>
-        <? endif; ?>
-    </section>
+        </section>
+    <? endif; ?>
+<? endif; ?>
 
     <section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
 
