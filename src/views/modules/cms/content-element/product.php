@@ -25,7 +25,6 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
             <meta itemprop="name" content="<?= \yii\helpers\Html::encode($collectionProduct->name); ?><?= $priceHelper->basePrice->money; ?>"/>
             <link itemprop="url" href="<?= $collectionProduct->absoluteUrl; ?>"/>
             <meta itemprop="description" content="<?= $collectionProduct->description_short ? \yii\helpers\Html::encode($collectionProduct->description_short) : '-'; ?>"/>
-            1111
             <meta itemprop="sku" content="<?= $collectionProduct->id; ?>"/>
 
             <? if ($collectionProduct->relatedPropertiesModel->getAttribute('brand')) : ?>
