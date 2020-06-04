@@ -27,7 +27,9 @@ class CollectionController extends \yii\console\Controller
     public function actionUpdateMap()
     {
         //Товары
-        $products = CmsContentElement::find()->andWhere(['content_id' => 2]);
+        $products = CmsContentElement::find()
+            //->where(['id' => 29695])
+            ->andWhere(['content_id' => 2]);
         foreach ($products->each(50) as $product) {
             $collectionID = $product->relatedPropertiesModel->getAttribute($this->productProperty);
             if (!$collectionID) {
@@ -42,13 +44,14 @@ class CollectionController extends \yii\console\Controller
             foreach ($collectionIDs as $collectionID) {
                 $this->stdout("\tКоллекция: {$collectionID}\n");
 
-                $collection = CmsContentElement::find()
+                $collectionQ = CmsContentElement::find()
                     ->joinWith('relatedElementProperties map')
                     ->joinWith('relatedElementProperties.property property')
                     ->andWhere(['property.code' => $this->collectionProperty])
-                    ->andWhere(['map.value' => (int)$collectionID])
-                    ->one();
+                    ->andWhere(['map.value' => (int) $collectionID])
+                ;
 
+                $collection = $collectionQ->one();
                 if (!$collection) {
                     $this->stdout("\tКоллекция не найдена в нашей базе\n", Console::FG_RED);
                     continue;
