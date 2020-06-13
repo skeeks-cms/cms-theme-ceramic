@@ -15,7 +15,6 @@ if ($model->activeChildren) {
     return;
 }
 
-
 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
 $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
 $availabilityFiltersHandler->value = (int)\Yii::$app->shop->is_show_product_only_quantity;

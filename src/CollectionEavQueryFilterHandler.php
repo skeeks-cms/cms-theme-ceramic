@@ -51,11 +51,12 @@ class CollectionEavQueryFilterHandler extends CmsEavQueryFilterHandler
                 //->where(['in', 'collection_id', implode(",", $ids)])
                 ->andWhere(new Expression("collection_id in ({$ids})"))
                 ->select(['product_id']);
+            
+            $products = $products->column();
         }
 
 
         $this->elementIds = $products;
-
         return $this;
     }
 
