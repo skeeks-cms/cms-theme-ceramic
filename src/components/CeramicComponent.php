@@ -30,8 +30,6 @@ use yii\helpers\ArrayHelper;
  * @property CmsContent       $storeContent
  * @property CmsContent       $stores
  *
- * @property array            $notifyEmails
- *
  * Class ShopComponent
  * @package skeeks\cms\shop\components
  */

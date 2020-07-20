@@ -116,7 +116,7 @@ $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide'])->on
                 $query->andWhere(['IS NOT', 'p.id', null]);
                 $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().'.image_id', null]);
 
-                if (!\Yii::$app->shop->is_show_product_no_price) {
+                if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
                     $query->joinWith('hasPriceProducts');
                 }
 
@@ -156,7 +156,7 @@ $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide'])->on
                 $query->andWhere(['IS NOT', 'p.id', null]);
                 $query->andWhere(['IS NOT', \skeeks\cms\themes\ceramic\models\CollectionCmsContentElement::tableName().'.image_id', null]);
 
-                if (!\Yii::$app->shop->is_show_product_no_price) {
+                if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
                     $query->joinWith('hasPriceProducts');
                 }
                 //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
@@ -208,7 +208,7 @@ $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide'])->on
                 $activeDataProvider->query->with('shopProduct.baseProductPrice');
                 $activeDataProvider->query->with('shopProduct.minProductPrice');
                 $activeDataProvider->query->with('image');
-                if (!\Yii::$app->shop->is_show_product_no_price) {
+                if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
                     $activeDataProvider->query->joinWith('shopProduct.shopProductPrices as pricesFilter');
                     $activeDataProvider->query->andWhere(['>', '`pricesFilter`.price', 0]);
                 }

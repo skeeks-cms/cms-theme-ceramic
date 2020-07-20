@@ -195,7 +195,7 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
                                         <div class="control-group group-submit g-mr-10 g-mb-15">
                                             <div class="buttons-row ">
                                                 <? if ($collectionProduct->shopProduct->minProductPrice && $collectionProduct->shopProduct->minProductPrice->price == 0) : ?>
-                                                    <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
+                                                    <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
                                                         <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
                                                             'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
                                                             'type'    => 'button',
@@ -327,7 +327,9 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
                                         <div class="tab-pane fade" id="nav-1-1-accordion-default-hor-left-icons--2" role="tabpanel">
                                             <p class="g-font-weight-600">Проблема с добавлением товара в корзину?</p>
                                             <p>Если у вас появилась сложность с добавлением товара в корзину, вы можете позвонить по номеру
-                                                <a href="tel:<?= $this->theme->phone; ?>"><?= $this->theme->phone; ?></a> и оформить заказ по телефону.</p>
+                                                <?php if (\Yii::$app->skeeks->site->cmsSitePhone) : ?>
+                                                    <a href="tel:<?= \Yii::$app->skeeks->site->cmsSitePhone->value; ?>"><?= \Yii::$app->skeeks->site->cmsSitePhone->value; ?></a>
+                                                <?php endif; ?> и оформить заказ по телефону.</p>
                                             <p>Пожалуйста, сообщите, какие проблемы с добавлением товара в корзину вы испытываете:</p>
                                         </div>
                                     </div>
@@ -425,7 +427,7 @@ $rating = $collectionProduct->relatedPropertiesModel->getSmartAttribute('reviews
                                             'ceramicMap.product_id='.\skeeks\cms\themes\ceramic\models\ProductCmsContentElement::tableName().'.id');
                                         $activeDataProvider->query->andWhere(['collection_id' => $collection->id]);
 
-                                        if (!\Yii::$app->shop->is_show_product_no_price) {
+                                        if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
                                             $activeDataProvider->query->joinWith('shopProduct.shopProductPrices as pricesFilter');
                                             $activeDataProvider->query->andWhere(['>', '`pricesFilter`.price', 0]);
                                         }
